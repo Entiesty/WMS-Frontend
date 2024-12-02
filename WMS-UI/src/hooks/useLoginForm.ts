@@ -12,7 +12,7 @@ export default function useLoginForm() {
 
     const submitLoginForm = async () => {
         try{
-            const response = await postRequest('/user', loginForm);
+            const response = await postRequest('/auth/login', loginForm);
             console.log(response);
 
             if(response.status == 200 && response.data.token) {

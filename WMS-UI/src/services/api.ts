@@ -4,7 +4,7 @@ const API_BASE_URL = "http://localhost:8080";
 
 export const postRequest = async (url: string, data: object) => {
     try{
-        return await axios.post(url, data);
+        return await axios.post(`${API_BASE_URL}${url}`, data);
     } catch (error) {
         throw error;
     }
