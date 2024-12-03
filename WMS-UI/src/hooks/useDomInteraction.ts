@@ -1,4 +1,4 @@
-import { onMounted, ref } from 'vue';
+import {onMounted, ref} from 'vue';
 
 export default function useDomInteraction() {
     const container = ref<HTMLElement | null>(null); // 声明容器的引用

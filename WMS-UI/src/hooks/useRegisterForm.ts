@@ -13,7 +13,7 @@ export default function useRegisterForm() {
 
     let registerSucceed = ref<boolean>(false);
     let registerFail = ref<boolean>(false);
-    let responseMessage = ref<string>("");
+    let registerResponseMessage = ref<string>("");
 
     const submitRegisterForm = async () => {
         try {
@@ -22,21 +22,20 @@ export default function useRegisterForm() {
 
             registerSucceed.value = true;
             registerFail.value = false;
-            responseMessage.value = response.data.message;
-        } catch (error:any) {
+            registerResponseMessage.value = response.data.message;
+        } catch (error: any) {
             console.log('错误信息：', error)
-            responseMessage.value = error.response.data.message;
+            registerResponseMessage.value = error.response.data.message;
             console.log("responseMessage", error.response.data.message);
             registerFail.value = true;
             registerSucceed.value = false;
-            throw error;
         }
     }
 
     return {
         registerForm,
         submitRegisterForm,
-        responseMessage,
+        registerResponseMessage,
         registerSucceed,
         registerFail,
     }

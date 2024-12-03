@@ -1,5 +1,5 @@
 import type {FormData} from "@/types/formData";
-import {reactive} from "vue";
+import {reactive, ref} from "vue";
 import {postRequest} from "@/services/api.ts";
 
 export default function useLoginForm() {
@@ -10,21 +10,36 @@ export default function useLoginForm() {
         status: 0
     })
 
-    const submitLoginForm = async () => {
-        try{
-            const response = await postRequest('/auth/login', loginForm);
-            console.log(response);
+    let loginSucceed = ref<boolean>(false);
+    let loginFail = ref<boolean>(false);
+    let loginResponseMessage = ref<string>("");
 
-            if(response.status == 200 && response.data.token) {
-                localStorage.setItem('token', response.data.token);
-            }
-        } catch (error) {
+    const submitLoginForm = async () => {
+        try {
+            const response = await postRequest('/auth/login', loginForm);
+            const token = response.headers['authorization'];
+
+            localStorage.setItem('token', token);
+            loginResponseMessage.value = response.data.message;
+            loginSucceed.value = true;
+            loginFail.value = false;
+
+            console.log(response);
+            console.log('Token from headers:', token);
+        } catch (error: any) {
+            loginResponseMessage.value = error.response.data.message;
+            loginFail.value = true;
+            loginSucceed.value = false;
+
             console.log('登录失败！', error);
         }
     }
 
     return {
         loginForm,
-        submitLoginForm
+        submitLoginForm,
+        loginResponseMessage,
+        loginSucceed,
+        loginFail,
     }
 }

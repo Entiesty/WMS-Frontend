@@ -16,6 +16,10 @@
           <a href="#">Forgot Password?</a>
         </div>
         <button type="submit" class="btn">Login</button>
+        <div v-if="loginSucceed || loginFail"
+             v-bind:class="{'success-message': loginSucceed, 'failure-message':loginFail}">
+          <p>{{ loginResponseMessage }}</p>
+        </div>
         <p>or login with social platforms</p>
         <div class="social-icons">
           <a href="#"><i class="bx bxl-google"></i></a>
@@ -57,7 +61,7 @@
         <button type="submit" class="btn">Register</button>
         <div v-if="registerSucceed || registerFail"
              v-bind:class="{'success-message': registerSucceed, 'failure-message':registerFail}">
-          <p>{{ responseMessage }}</p>
+          <p>{{ registerSucceed }}</p>
         </div>
         <p>or register with social platforms</p>
         <div class="social-icons">
@@ -92,8 +96,8 @@ import useLoginForm from "@/hooks/useLoginForm.ts";
 import useRegisterForm from "@/hooks/useRegisterForm.ts";
 
 const {container, registerBtn, loginBtn} = useDomInteraction();
-const {loginForm, submitLoginForm} = useLoginForm();
-const {registerForm, submitRegisterForm, responseMessage, registerSucceed, registerFail} = useRegisterForm();
+const {loginForm, submitLoginForm, loginResponseMessage, loginSucceed, loginFail} = useLoginForm();
+const {registerForm, submitRegisterForm, registerResponseMessage, registerSucceed, registerFail} = useRegisterForm();
 
 
 </script>
