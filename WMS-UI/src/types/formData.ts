@@ -3,4 +3,5 @@ export interface FormData {
     password: string,
     role: string,
     status: number,
+    captcha?: string
 }

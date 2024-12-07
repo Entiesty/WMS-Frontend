@@ -12,12 +12,18 @@
           <input type="password" v-model="loginForm.password" placeholder="Password" required/>
           <i class="bx bxs-lock-alt"></i>
         </div>
-        <div class="forgot-link">
-          <a href="#">Forgot Password?</a>
+        <div class="input-box">
+          <div>
+            <input type="text" v-model="loginForm.captcha" placeholder="Enter captcha" required />
+          </div>
         </div>
+          <img :src="captchaImageUrl" alt="Captcha" @click="updateCaptcha"/>
+<!--        <div class="forgot-link">-->
+<!--          <a href="#">Forgot Password?</a>-->
+<!--        </div>-->
         <button type="submit" class="btn">Login</button>
         <div v-if="loginSucceed || loginFail"
-             v-bind:class="{'success-message': loginSucceed, 'failure-message':loginFail}">
+             :class="{'message': true,'success-message': loginSucceed, 'failure-message':loginFail}">
           <p>{{ loginResponseMessage }}</p>
         </div>
         <p>or login with social platforms</p>
@@ -60,8 +66,8 @@
         </div>
         <button type="submit" class="btn">Register</button>
         <div v-if="registerSucceed || registerFail"
-             v-bind:class="{'success-message': registerSucceed, 'failure-message':registerFail}">
-          <p>{{ registerSucceed }}</p>
+             :class="{'message':true,'success-message': registerSucceed, 'failure-message':registerFail}">
+          <p>{{ registerResponseMessage }}</p>
         </div>
         <p>or register with social platforms</p>
         <div class="social-icons">
@@ -94,11 +100,15 @@
 import useDomInteraction from "@/hooks/useDomInteraction.ts";
 import useLoginForm from "@/hooks/useLoginForm.ts";
 import useRegisterForm from "@/hooks/useRegisterForm.ts";
+import {onMounted} from "vue";
 
 const {container, registerBtn, loginBtn} = useDomInteraction();
-const {loginForm, submitLoginForm, loginResponseMessage, loginSucceed, loginFail} = useLoginForm();
+const {loginForm, submitLoginForm, loginResponseMessage, loginSucceed, loginFail, captchaImageUrl, updateCaptcha} = useLoginForm();
 const {registerForm, submitRegisterForm, registerResponseMessage, registerSucceed, registerFail} = useRegisterForm();
 
+onMounted(async () => {
+  await updateCaptcha();
+});
 
 </script>
 
@@ -107,35 +117,36 @@ const {registerForm, submitRegisterForm, registerResponseMessage, registerSuccee
 @import "@/assets/boxicons.min.css";
 @import "@/assets/google-fonts.css";
 
+/* 通用消息样式 */
+.message {
+  margin-top: 20px;
+  padding: 15px;
+  color: white;
+  border-radius: 8px; /* 圆角 */
+  text-align: center;
+  font-size: 16px; /* 提升字体大小，增加可读性 */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 阴影效果 */
+}
+
+/* 成功消息样式 */
 .success-message {
   background-color: #28a745;
-  margin-top: 20px;
-  padding: 15px;
-  color: white;
-  border-radius: 8px; /* 增加圆角 */
-  text-align: center;
-  font-size: 16px; /* 提升字体大小，增加可读性 */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 添加阴影效果，增强层次感 */
 }
 
-.success-message p {
-  margin: 0;
-  font-weight: bold;
-}
-
+/* 失败消息样式 */
 .failure-message {
-  background-color: #f44336; /* 错误消息通常用红色 */
-  margin-top: 20px;
-  padding: 15px;
-  color: white;
-  border-radius: 8px; /* 增加圆角 */
-  text-align: center;
-  font-size: 16px; /* 提升字体大小，增加可读性 */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 添加阴影效果，增强层次感 */
+  background-color: #f44336;
 }
 
-.failure-message p {
+.message p {
   margin: 0;
-  font-weight: bold; /* 提升消息文本的强调感 */
+  font-weight: bold; /* 提升文本的强调感 */
 }
+
+img {
+  width: 250px;
+  height: 50px;
+  margin-bottom: 20px;
+}
+
 </style>

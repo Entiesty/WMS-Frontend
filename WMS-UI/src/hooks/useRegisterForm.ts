@@ -17,7 +17,7 @@ export default function useRegisterForm() {
 
     const submitRegisterForm = async () => {
         try {
-            const response = await postRequest('/auth/register', registerForm);
+            const response = await postRequest('/authorization/register', registerForm);
             console.log(response);
 
             registerSucceed.value = true;
