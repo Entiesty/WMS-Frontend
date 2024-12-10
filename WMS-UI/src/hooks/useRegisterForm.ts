@@ -1,5 +1,5 @@
 import {reactive, ref} from "vue";
-import type {FormData} from "@/types/formData.ts";
+import type {FormData} from "@/types/Data.ts";
 import {postRequest} from "@/services/api.ts";
 
 

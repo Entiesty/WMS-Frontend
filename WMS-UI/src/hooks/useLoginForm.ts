@@ -1,4 +1,4 @@
-import type {FormData} from "@/types/formData";
+import type {FormData} from "@/types/Data.ts";
 import {reactive, ref} from "vue";
 import {getCaptchaImage, postRequest} from "@/services/api.ts";
 import {useAuthStore} from "@/stores/authStore.ts";

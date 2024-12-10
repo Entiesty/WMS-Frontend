@@ -8,7 +8,24 @@
       <el-table-column prop="status" label="Status" align="center"/>
       <el-table-column prop="createdAt" label="CreatedAt" align="center"/>
       <el-table-column prop="updatedAt" label="UpdatedAt" align="center"/>
-      <el-table-column label="Actions" align="center"/>
+      <el-table-column label="Actions" align="center">
+        <template #default="scope">
+          <el-button type="primary" size="small" @click="editUser(scope.row)">编辑</el-button>
+          <el-popconfirm
+              confirm-button-text="是"
+              cancel-button-text="否"
+              :icon="InfoFilled"
+              icon-color="#626AEF"
+              title="确定要删除该用户吗？"
+              @confirm="confirmDelete(scope.row.id)"
+              :hide-after=100
+          >
+            <template #reference>
+              <el-button type="danger" size="small">删除</el-button>
+            </template>
+          </el-popconfirm>
+        </template>
+      </el-table-column>
     </el-table>
 
     <el-pagination
@@ -21,14 +38,50 @@
         style="margin-top: 20px;"
     />
   </el-card>
+
+  <el-dialog
+      v-model="editDialogFormVisible"
+      title="修改用户信息">
+    <el-form :model="user">
+      <el-form-item label="用户名" :label-width="formLabelWidth">
+        <el-input v-model="user.userName" placeholder="请输入新的用户名"/>
+      </el-form-item>
+      <el-form-item label="密码" :label-width="formLabelWidth">
+        <el-input v-model="user.password" placeholder="请输入新的用户密码"/>
+      </el-form-item>
+      <el-form-item label="角色" :label-width="formLabelWidth">
+        <el-select v-model="user.role" placeholder="选择角色权限">
+          <el-option label="超级管理员" value="super_admin"/>
+          <el-option label="信息管理员" value="information_manager"/>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="用户状态" :label-width="formLabelWidth">
+        <el-select v-model="user.status" placeholder="选择角色状态">
+          <el-option label="启用" value="启用"/>
+          <el-option label="禁用" value="禁用"/>
+        </el-select>
+      </el-form-item>
+    </el-form>
+
+    <template #footer>
+      <el-button @click="closeEditDialog">取消</el-button>
+      <el-button type="primary" @click="confirmUpdate">保存</el-button>
+    </template>
+  </el-dialog>
+
+
 </template>
 
 <script setup lang="ts">
 import {onMounted, reactive, ref} from "vue";
-import {postRequest} from "@/services/api.ts";
+import {deleteRequest, postRequest, putRequest} from "@/services/api.ts";
+import {InfoFilled} from "@element-plus/icons-vue";
+import type {User} from '@/types/Data.ts'
 
-const records = ref([]);
+const records = ref<User>();
 const total = ref<number>(0);
+let editDialogFormVisible = ref<boolean>(false);
+const formLabelWidth = ref<string>('80px');
 
 interface QueryPageParam {
   current: number;
@@ -39,6 +92,10 @@ const queryPageParam = reactive<QueryPageParam>({
   current: 1,
   size: 5,
 });
+
+const user = reactive<User>({
+  createdAt: "", id: 0, password: "", role: "", status: "", updatedAt: "", userName: ""
+})
 
 const fetchUsers = async () => {
   try {
@@ -60,6 +117,53 @@ onMounted(() => {
 const handleCurrentChange = (val: number) => {
   queryPageParam.current = val;
   fetchUsers();
+}
+
+function confirmDelete(id: number) {
+  // 发起删除请求
+  deleteRequest("/user/" + id)
+      .then(() => {
+        // 删除成功后刷新用户列表
+        fetchUsers();
+        // 你可以根据需要在此显示提示框或者其他信息
+        console.log(`User with id ${id} deleted successfully.`);
+      })
+      .catch((error) => {
+        // 错误处理
+        console.error("Failed to delete user:", error);
+      });
+}
+
+const confirmUpdate = () => {
+  const payload = {
+    id: user.id, // 使用 `user.id` 来确认当前用户
+    userName: user.userName,
+    password: user.password,
+    role: user.role,
+    status: user.status,
+  };
+
+  putRequest('/user', payload)
+      .then(() => {
+        fetchUsers();
+        editDialogFormVisible.value = false;
+        console.log('User updated successfully.');
+      })
+      .catch((error) => {
+        console.log(payload);
+        console.error('Failed to update user:', error);
+      });
+};
+
+
+
+function closeEditDialog() {
+  editDialogFormVisible.value = false;
+}
+
+function editUser(row: User) {
+  Object.assign(user, row); // 将当前用户的数据赋值给 `user`，包括 `id` 等
+  editDialogFormVisible.value = true; // 打开编辑对话框
 }
 
 </script>

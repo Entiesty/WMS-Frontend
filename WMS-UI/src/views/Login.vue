@@ -17,7 +17,9 @@
             <input type="text" v-model="loginForm.captcha" placeholder="Enter captcha" required />
           </div>
         </div>
+        <div>
           <img :src="captchaImageUrl" alt="Captcha" @click="updateCaptcha"/>
+        </div>
 <!--        <div class="forgot-link">-->
 <!--          <a href="#">Forgot Password?</a>-->
 <!--        </div>-->
@@ -144,7 +146,7 @@ onMounted(async () => {
 }
 
 img {
-  width: 250px;
+  width: 400px;
   height: 50px;
   margin-bottom: 20px;
 }
