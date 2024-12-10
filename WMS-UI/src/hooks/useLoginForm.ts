@@ -1,8 +1,8 @@
 import type {FormData} from "@/types/formData";
 import {reactive, ref} from "vue";
-import {postRequest} from "@/services/api.ts";
+import {getCaptchaImage, postRequest} from "@/services/api.ts";
 import {useAuthStore} from "@/stores/authStore.ts";
-import axios from "axios";
+import router from "@/router";
 
 export default function useLoginForm() {
     const loginForm = reactive<FormData>({
@@ -39,6 +39,7 @@ export default function useLoginForm() {
 
             console.log(response);
             console.log('Token from headers:', token);
+            await router.push('/SuperAdminDashboard');
         } catch (error: any) {
             loginResponseMessage.value = error.response.data.message;
             loginFail.value = true;
@@ -52,29 +53,17 @@ export default function useLoginForm() {
     };
 
     const captchaImageUrl = ref<string>("");
-    const getCaptchaImage = async () => {
+    const loadCaptcha = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/authorization/captcha', {
-                responseType: 'arraybuffer', // 获取字节流
-                withCredentials: true,
-            });
-            // 将字节流转换为 Blob 对象
-            const blob = new Blob([response.data], {type: 'image/png'});
-
-            // 生成一个 URL 供 img 标签使用
-            const imageUrl = URL.createObjectURL(blob);
-
-            captchaImageUrl.value = imageUrl; // 保存图片 URL
-            return imageUrl;
+            captchaImageUrl.value = await getCaptchaImage();
         } catch (error) {
-            console.error("获取验证码失败:", error);
-            return "";
+            console.error("加载验证码失败:", error);
         }
     };
 
     // 更新验证码
     const updateCaptcha = async () => {
-        return await getCaptchaImage();
+        return await loadCaptcha();
     };
 
     return {
