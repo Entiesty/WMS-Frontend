@@ -42,11 +42,11 @@
   <el-dialog
       v-model="editDialogFormVisible"
       title="修改用户信息">
-    <el-form :model="user">
-      <el-form-item label="用户名" :label-width="formLabelWidth">
+    <el-form :model="user" :rules="rules" ref="ruleFormRef" status-icon>
+      <el-form-item label="用户名" :label-width="formLabelWidth" prop="userName">
         <el-input v-model="user.userName" placeholder="请输入新的用户名"/>
       </el-form-item>
-      <el-form-item label="密码" :label-width="formLabelWidth">
+      <el-form-item label="密码" :label-width="formLabelWidth" prop="password">
         <el-input v-model="user.password" placeholder="请输入新的用户密码"/>
       </el-form-item>
       <el-form-item label="角色" :label-width="formLabelWidth">
@@ -74,9 +74,10 @@
 
 <script setup lang="ts">
 import {onMounted, reactive, ref} from "vue";
-import {deleteRequest, postRequest, putRequest} from "@/services/api.ts";
+import {deleteRequest, getRequest, postRequest, putRequest} from "@/services/api.ts";
 import {InfoFilled} from "@element-plus/icons-vue";
 import type {User} from '@/types/Data.ts'
+import type {FormInstance, FormRules} from "element-plus";
 
 const records = ref<User>();
 const total = ref<number>(0);
@@ -108,6 +109,51 @@ const fetchUsers = async () => {
     console.error(error);
   }
 };
+
+const ruleFormRef = ref<FormInstance>();
+const ruleForm = reactive({
+  userName: '',
+  password: '',
+});
+
+const checkUserName = async (rule: any, value: string, callback: Function) => {
+  if (!value) {
+    return callback(new Error('用户名不能为空'));
+  }
+  try {
+    const response = await getRequest('/user/' + value); // 确保请求完成
+    console.log(response);
+    if (!response.data) {
+      callback(); // 如果用户已存在
+    } else {
+      callback(new Error('用户名已存在')); // 用户名可用
+    }
+  } catch (error: any) {
+    if (error.response && error.response.status === 403) {
+      console.error('403 Forbidden: 登录状态失效或权限不足');
+    }
+    callback(new Error('验证用户名时发生错误')); // 捕获其他错误
+  }
+};
+
+
+const rules = reactive<FormRules<typeof ruleForm>>({
+  userName: [
+    {required: true, message: '用户名不能为空', trigger: 'blur'},
+    {asyncValidator: checkUserName, trigger: 'blur'}
+  ],
+  password: [
+    {required: true, message: '密码不能为空', trigger: 'blur' },
+    {pattern: /^(?=.*\d).{8,}$/, message: '密码至少包含一个数字且至少八个字符', trigger: 'blur'}
+  ]
+});
+
+
+
+
+
+
+
 
 
 onMounted(() => {

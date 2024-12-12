@@ -48,7 +48,7 @@ api.interceptors.response.use(
 
                 // 弹窗关闭后清除 token 并跳转到登录页面
                 authStore.clearToken();
-                await router.push("/login");
+                await router.push("/");
             } catch (e) {
                 // 如果弹窗被取消或有其他异常，可以处理
                 console.error(e);
@@ -71,6 +71,7 @@ const request = async (method: "get" | "post" | "put" | "delete", url: string, d
     }
 };
 
+export const getRequest = (url: string) => request("get", url);
 export const postRequest = (url: string, data: object) => request("post", url, data);
 export const putRequest = (url: string, data: object) => request("put", url, data);
 export const deleteRequest = (url: string) => request("delete", url);
