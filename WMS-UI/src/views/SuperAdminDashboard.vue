@@ -123,9 +123,6 @@
           </el-dropdown>
         </el-header>
 
-
-
-
         <el-main>
           <el-scrollbar>
             <router-view></router-view>
@@ -139,41 +136,9 @@
 <script setup lang="ts">
 import {Box, DataAnalysis, DataLine, Goods, Lock, OfficeBuilding,
   User, UserFilled, Van, Avatar} from '@element-plus/icons-vue'
-import {useRouter} from "vue-router";
-import {ElMessageBox} from "element-plus";
-import {useAuthStore} from "@/stores/authStore.ts";
+import {useMenuAndLogout} from "@/hooks/useMenuAndLogout.ts";
 
-const router = useRouter();
-const authStore = useAuthStore();
-
-
-function handleMenuSelect(index: String) {
-  switch (index) {
-    case '1-1':
-      router.push("/userList");
-      break;
-  }
-}
-
-function handleLogout() {
-  ElMessageBox.confirm(
-      '确定要退出登录吗？',
-      '提示',
-      {
-        confirmButtonText: '确认',
-        cancelButtonText: '取消',
-        type: 'warning',
-      }
-  ).then(() => {
-    // 执行登出逻辑
-    authStore.clearToken();
-    router.push("/");
-    console.log("User logged out");
-  }).catch(() => {
-    console.log("User canceled logout");
-  });
-}
-
+const { handleMenuSelect, handleLogout } = useMenuAndLogout();
 </script>
 
 <style scoped>
