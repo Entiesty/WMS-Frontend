@@ -12,18 +12,16 @@ const api = axios.create({
     withCredentials: true,
 });
 
-const authorizationStore = useAuthorizationStore();
 
 api.interceptors.request.use(
     (config) => {
-        const authStore = useAuthorizationStore();
-        const token = authStore.token; // 从 Pinia store 获取 token
+        const authorizationStore = useAuthorizationStore();
+        const token = authorizationStore.token; // 从 Pinia store 获取 token
 
         if (token) {
             console.log('请求拦截器', token);
             config.headers.authorization = `Bearer ${token}`;
         }
-
 
 
         return config;
@@ -40,6 +38,7 @@ api.interceptors.response.use(
     async (error) => {
         if (error.response && error.response.status === 403) {
             try {
+                const authorizationStore = useAuthorizationStore();
                 // 弹窗提示用户登录过期
                 await ElMessageBox.alert("登录信息已过期，请重新登录", "提示", {
                     confirmButtonText: "确定",

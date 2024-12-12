@@ -28,9 +28,12 @@ export default function useLoginForm() {
         try {
             const response = await postRequest('/authorization/login', loginForm);
             const token = response.headers['authorization'];
+            const role = response.data.role;
 
             authorizationStore.setToken(token);
+            authorizationStore.setRole(role);
             console.log("Pinia的Token: ", authorizationStore.token)
+            console.log("Pinia的Role: ", authorizationStore.role)
 
             loginResponseMessage.value = response.data.message;
             loginSucceed.value = true;
@@ -38,6 +41,7 @@ export default function useLoginForm() {
 
             console.log(response);
             console.log('Token from headers:', token);
+            console.log('Role from response:', role);
             await router.push('/SuperAdminDashboard');
         } catch (error: any) {
             loginResponseMessage.value = error.response.data.message;

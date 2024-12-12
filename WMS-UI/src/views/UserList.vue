@@ -65,7 +65,7 @@
 
     <template #footer>
       <el-button @click="closeEditDialog">取消</el-button>
-      <el-button type="primary" @click="confirmUpdate">保存</el-button>
+      <el-button type="primary" @click="validateBeforeSubmit">保存</el-button>
     </template>
   </el-dialog>
 
@@ -73,28 +73,37 @@
 </template>
 
 <script setup lang="ts">
-import {
-  useUserList,
-  useUserEdit,
-  useUserFormValidation,
-  useUserDelete,
-  useUserStyle
-} from '@/hooks/useUserManagement.ts';
+import {useUserStyle} from '@/hooks/useUserStyle.ts';
+import {useUserList} from "@/hooks/useUserList.ts";
+import {useUserEdit} from "@/hooks/useUserEdit.ts";
+import {useUserFormValidation} from "@/hooks/useUserFormValidation.ts";
+import {useUserDelete} from "@/hooks/useUserDelete.ts";
 
 // 使用用户列表相关逻辑
-const { records, total, queryPageParam, fetchUsers, handleCurrentChange } = useUserList();
+const {records, total, queryPageParam, fetchUsers, handleCurrentChange} = useUserList();
 
 // 使用用户编辑相关逻辑
-const { editDialogFormVisible, user, editUser, confirmUpdate, closeEditDialog } = useUserEdit();
+const {editDialogFormVisible, user, editUser, confirmUpdate, closeEditDialog} = useUserEdit();
 
 // 使用用户表单验证逻辑
-const { ruleFormRef, rules } = useUserFormValidation();
+const {ruleFormRef, rules} = useUserFormValidation();
 
 // 使用用户删除逻辑
-const { confirmDelete } = useUserDelete(fetchUsers);
+const {confirmDelete} = useUserDelete(fetchUsers);
 
 //使用用户样式
 const {InfoFilledIcon, formLabelWidth} = useUserStyle();
+
+const validateBeforeSubmit = () => {
+  if (!ruleFormRef.value) return;
+  ruleFormRef.value.validate(async (valid: boolean) => {
+    if (valid) {
+      await confirmUpdate();
+    } else {
+      console.log("Validation failed");
+    }
+  });
+};
 </script>
 
 <style scoped>

@@ -1,9 +1,11 @@
 import type {RouteRecordRaw} from "vue-router";
-import {createRouter, createWebHistory, type Router} from "vue-router";
+import {createRouter, createWebHistory, type Router, useRouter} from "vue-router";
 import {useAuthorizationStore} from "@/stores/authorizationStore.ts";
 import {ElMessage} from "element-plus";
+import {useRegisterRoutes} from "@/hooks/useRegisterRoutes.ts";
+import {getRequest} from "@/services/api.ts";
 
-const routes: Array<RouteRecordRaw> = [
+const staticRoutes: Array<RouteRecordRaw> = [
     {
         path: '/',
         name: 'Login',
@@ -25,9 +27,25 @@ const routes: Array<RouteRecordRaw> = [
 
 const router: Router = createRouter({
     history: createWebHistory(),
-    routes: routes
+    routes: staticRoutes
 });
 
+export async function loadDynamicRoutes() {
+    const router = useRouter();
+    const {registerRoutes} = useRegisterRoutes(router);
+
+    try {
+        const role = useAuthorizationStore().role;
+        // 假设从后端获取动态路由数据
+        const {data: routes} = await getRequest(`/api/routes/${role}`);
+        console.log(routes);
+
+        // 注册动态路由
+        registerRoutes(routes);
+    } catch (error) {
+        console.error('Failed to load dynamic routes:', error);
+    }
+}
 
 router.beforeEach(async (to, from) => {
     const authorizationStore = useAuthorizationStore();  // 在守卫内部调用 useAuthStore()
