@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia';
 
-export const useAuthStore = defineStore('auth', {
+export const useAuthorizationStore = defineStore('auth', {
     state: () => ({
         token: null, // 用来存储 token
     }),

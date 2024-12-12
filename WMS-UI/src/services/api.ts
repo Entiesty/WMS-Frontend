@@ -1,5 +1,5 @@
 import axios from "axios";
-import {useAuthStore} from "@/stores/authStore.ts";
+import {useAuthorizationStore} from "@/stores/authorizationStore.ts";
 import router from "@/router";
 import {ElMessageBox} from "element-plus"; // 导入 Pinia store
 
@@ -12,11 +12,11 @@ const api = axios.create({
     withCredentials: true,
 });
 
-const authStore = useAuthStore();
+const authorizationStore = useAuthorizationStore();
 
 api.interceptors.request.use(
     (config) => {
-        const authStore = useAuthStore();
+        const authStore = useAuthorizationStore();
         const token = authStore.token; // 从 Pinia store 获取 token
 
         if (token) {
@@ -47,7 +47,7 @@ api.interceptors.response.use(
                 });
 
                 // 弹窗关闭后清除 token 并跳转到登录页面
-                authStore.clearToken();
+                authorizationStore.clearToken();
                 await router.push("/");
             } catch (e) {
                 // 如果弹窗被取消或有其他异常，可以处理

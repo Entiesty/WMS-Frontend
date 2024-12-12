@@ -1,6 +1,6 @@
 import type {RouteRecordRaw} from "vue-router";
 import {createRouter, createWebHistory, type Router} from "vue-router";
-import {useAuthStore} from "@/stores/authStore.ts";
+import {useAuthorizationStore} from "@/stores/authorizationStore.ts";
 import {ElMessage} from "element-plus";
 
 const routes: Array<RouteRecordRaw> = [
@@ -30,10 +30,10 @@ const router: Router = createRouter({
 
 
 router.beforeEach(async (to, from) => {
-    const authStore = useAuthStore();  // 在守卫内部调用 useAuthStore()
+    const authorizationStore = useAuthorizationStore();  // 在守卫内部调用 useAuthStore()
 
     // 获取 token
-    const token = authStore.token;
+    const token = authorizationStore.token;
 
     // 如果没有 token 且目标页面不是登录页面，则重定向到登录页
     if (!token && to.name !== 'Login') {

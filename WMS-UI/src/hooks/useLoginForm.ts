@@ -1,7 +1,7 @@
 import type {FormData} from "@/types/Data.ts";
 import {reactive, ref} from "vue";
 import {getCaptchaImage, postRequest} from "@/services/api.ts";
-import {useAuthStore} from "@/stores/authStore.ts";
+import {useAuthorizationStore} from "@/stores/authorizationStore.ts";
 import router from "@/router";
 
 export default function useLoginForm() {
@@ -16,7 +16,7 @@ export default function useLoginForm() {
     let loginSucceed = ref<boolean>(false);
     let loginFail = ref<boolean>(false);
     let loginResponseMessage = ref<string>("");
-    const authStore = useAuthStore();
+    const authorizationStore = useAuthorizationStore();
     let loading = ref<boolean>(false);
 
     const submitLoginForm = async () => {
@@ -29,8 +29,8 @@ export default function useLoginForm() {
             const response = await postRequest('/authorization/login', loginForm);
             const token = response.headers['authorization'];
 
-            authStore.setToken(token);
-            console.log("Pinia的Token: ", authStore.token)
+            authorizationStore.setToken(token);
+            console.log("Pinia的Token: ", authorizationStore.token)
 
             loginResponseMessage.value = response.data.message;
             loginSucceed.value = true;
