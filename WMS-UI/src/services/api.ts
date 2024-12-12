@@ -1,5 +1,7 @@
 import axios from "axios";
-import {useAuthStore} from "@/stores/authStore.ts"; // 导入 Pinia store
+import {useAuthStore} from "@/stores/authStore.ts";
+import router from "@/router";
+import {ElMessageBox} from "element-plus"; // 导入 Pinia store
 
 const API_BASE_URL = "http://localhost:8080";
 
@@ -9,6 +11,8 @@ const api = axios.create({
     timeout: 10000, // 设置超时时间
     withCredentials: true,
 });
+
+const authStore = useAuthStore();
 
 api.interceptors.request.use(
     (config) => {
@@ -20,6 +24,8 @@ api.interceptors.request.use(
             config.headers.authorization = `Bearer ${token}`;
         }
 
+
+
         return config;
     },
     (error) => {
@@ -27,6 +33,31 @@ api.interceptors.request.use(
         return Promise.reject(error);
     }
 );
+
+
+api.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+        if (error.response && error.response.status === 403) {
+            try {
+                // 弹窗提示用户登录过期
+                await ElMessageBox.alert("登录信息已过期，请重新登录", "提示", {
+                    confirmButtonText: "确定",
+                    type: "warning",
+                });
+
+                // 弹窗关闭后清除 token 并跳转到登录页面
+                authStore.clearToken();
+                await router.push("/login");
+            } catch (e) {
+                // 如果弹窗被取消或有其他异常，可以处理
+                console.error(e);
+            }
+        }
+        return Promise.reject(error);
+    }
+);
+
 
 const request = async (method: "get" | "post" | "put" | "delete", url: string, data?: object) => {
     try {
@@ -40,7 +71,6 @@ const request = async (method: "get" | "post" | "put" | "delete", url: string, d
     }
 };
 
-export const getRequest = (url: string, data: object) => request("get", url, data);
 export const postRequest = (url: string, data: object) => request("post", url, data);
 export const putRequest = (url: string, data: object) => request("put", url, data);
 export const deleteRequest = (url: string) => request("delete", url);

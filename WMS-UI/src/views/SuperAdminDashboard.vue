@@ -113,11 +113,11 @@
       <el-container>
         <el-header>
           <el-dropdown>
-            <el-icon><Avatar /></el-icon>
             <span>Boogiepop</span>
+            <el-icon><Avatar/></el-icon>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item>退出登录</el-dropdown-item>
+                <el-dropdown-item @click="handleLogout">登出</el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -140,14 +140,38 @@
 import {Box, DataAnalysis, DataLine, Goods, Lock, OfficeBuilding,
   User, UserFilled, Van, Avatar} from '@element-plus/icons-vue'
 import {useRouter} from "vue-router";
+import {ElMessageBox} from "element-plus";
+import {useAuthStore} from "@/stores/authStore.ts";
 
 const router = useRouter();
+const authStore = useAuthStore();
+
+
 function handleMenuSelect(index: String) {
   switch (index) {
     case '1-1':
       router.push("/userList");
       break;
   }
+}
+
+function handleLogout() {
+  ElMessageBox.confirm(
+      '确定要退出登录吗？',
+      '提示',
+      {
+        confirmButtonText: '确认',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }
+  ).then(() => {
+    // 执行登出逻辑
+    authStore.clearToken();
+    router.push("/");
+    console.log("User logged out");
+  }).catch(() => {
+    console.log("User canceled logout");
+  });
 }
 
 </script>

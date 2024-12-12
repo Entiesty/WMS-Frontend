@@ -29,7 +29,6 @@ export default function useLoginForm() {
             const response = await postRequest('/authorization/login', loginForm);
             const token = response.headers['authorization'];
 
-            localStorage.setItem('token', token);
             authStore.setToken(token);
             console.log("Pinia的Token: ", authStore.token)
 
@@ -46,7 +45,7 @@ export default function useLoginForm() {
             loginSucceed.value = false;
 
             console.log('登录失败！', error);
-            await getCaptchaImage();
+            await updateCaptcha();
         } finally {
             loading.value = false;
         }
