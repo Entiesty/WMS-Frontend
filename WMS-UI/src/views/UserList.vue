@@ -99,6 +99,7 @@ const validateBeforeSubmit = () => {
   ruleFormRef.value.validate(async (valid: boolean) => {
     if (valid) {
       await confirmUpdate();
+      await fetchUsers();
     } else {
       console.log("Validation failed");
     }

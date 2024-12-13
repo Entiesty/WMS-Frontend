@@ -16,7 +16,7 @@ export function useUserFormValidation(initialId?: number) {
         }
         try {
             const response = await getRequest(`/user/validate-username
-            ?username=${value}?userId=${initialId}`);
+            ?username=${value}&userId=${initialId}`);
             if (response.status === 409) {
                 callback(new Error('用户名已存在'));
             } else {
