@@ -15,3 +15,11 @@ export interface User {
     createdAt: string,
     updatedAt: string,
 }
+
+export interface Warehouse {
+    id: number,
+    name: string,
+    location: string,
+    createdAt: string,
+    updatedAt: string,
+}

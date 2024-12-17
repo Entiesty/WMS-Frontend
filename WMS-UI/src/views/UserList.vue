@@ -1,5 +1,5 @@
 <template>
-  <el-card style="">
+  <el-card >
     <el-table :data="records" border fit>
       <el-table-column prop="id" label="Id" align="center"/>
       <el-table-column prop="userName" label="UserName" align="center"/>
@@ -73,11 +73,11 @@
 </template>
 
 <script setup lang="ts">
-import {useUserStyle} from '@/hooks/useUserStyle.ts';
-import {useUserList} from "@/hooks/useUserList.ts";
-import {useUserEdit} from "@/hooks/useUserEdit.ts";
-import {useUserFormValidation} from "@/hooks/useUserFormValidation.ts";
-import {useUserDelete} from "@/hooks/useUserDelete.ts";
+import {useUserStyle} from '@/hooks/user/useUserStyle.ts';
+import {useUserList} from "@/hooks/user/useUserList.ts";
+import {useUserEdit} from "@/hooks/user/useUserEdit.ts";
+import {useUserFormValidation} from "@/hooks/user/useUserFormValidation.ts";
+import {useUserDelete} from "@/hooks/user/useUserDelete.ts";
 
 // 使用用户列表相关逻辑
 const {records, total, queryPageParam, fetchUsers, handleCurrentChange} = useUserList();

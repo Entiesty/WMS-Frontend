@@ -4,6 +4,7 @@ export const useAuthorizationStore = defineStore('authorization', {
     state: () => ({
         token: null as string | null, // 用来存储 token
         role: null as string | null,  // 用来存储角色信息
+        hasLoadedRoutes: false,
     }),
     actions: {
         setToken(newToken: string) {
@@ -18,6 +19,9 @@ export const useAuthorizationStore = defineStore('authorization', {
         clearRole() {
             this.role = null;
         },
+        setHasLoadedRoutes(status: boolean) {
+            this.hasLoadedRoutes = status;
+        }
     },
     persist: true, // 启用持久化
 });

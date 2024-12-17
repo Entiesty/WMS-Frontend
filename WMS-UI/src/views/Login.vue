@@ -99,9 +99,9 @@
 </template>
 
 <script setup lang="ts">
-import useDomInteraction from "@/hooks/useDomInteraction.ts";
-import useLoginForm from "@/hooks/useLoginForm.ts";
-import useRegisterForm from "@/hooks/useRegisterForm.ts";
+import useDomInteraction from "@/hooks/Authorization/useDomInteraction.ts";
+import useLoginForm from "@/hooks/Authorization/useLoginForm.ts";
+import useRegisterForm from "@/hooks/Authorization/useRegisterForm.ts";
 import {onMounted} from "vue";
 
 const {container, registerBtn, loginBtn} = useDomInteraction();

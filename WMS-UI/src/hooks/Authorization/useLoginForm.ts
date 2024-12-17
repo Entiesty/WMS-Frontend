@@ -1,23 +1,28 @@
-import type {FormData} from "@/types/Data.ts";
-import {reactive, ref} from "vue";
-import {getCaptchaImage, postRequest} from "@/services/api.ts";
-import {useAuthorizationStore} from "@/stores/authorizationStore.ts";
+// src/hooks/useLoginForm.ts
+import { reactive, ref } from "vue";
+import { postRequest } from "@/services/api.ts";
+import { useAuthorizationStore } from "@/stores/authorizationStore.ts";
+import { useCaptcha } from "@/hooks/Authorization/useCaptcha.ts";
+import { loadDynamicRoutes } from "@/hooks/Authorization/useDynamicRoutes.ts";
+import { useRoleRedirect } from "@/hooks/Authorization/useRoleRedirect.ts";
 import router from "@/router";
 
 export default function useLoginForm() {
-    const loginForm = reactive<FormData>({
+    const loginForm = reactive({
         userName: "",
         password: "",
         role: "information_manager",
         status: 0,
         captcha: "",
-    })
+    });
 
-    let loginSucceed = ref<boolean>(false);
-    let loginFail = ref<boolean>(false);
-    let loginResponseMessage = ref<string>("");
+    const loginSucceed = ref(false);
+    const loginFail = ref(false);
+    const loginResponseMessage = ref("");
+    const loading = ref(false);
     const authorizationStore = useAuthorizationStore();
-    let loading = ref<boolean>(false);
+    const { captchaImageUrl, loadCaptcha } = useCaptcha();
+    const { redirectToRolePage } = useRoleRedirect();
 
     const submitLoginForm = async () => {
         if (loading.value) {
@@ -28,39 +33,30 @@ export default function useLoginForm() {
         try {
             const response = await postRequest('/authorization/login', loginForm);
             const token = response.headers['authorization'];
-            const role = response.data.role;
+            const role = response.headers['role'];
 
             authorizationStore.setToken(token);
             authorizationStore.setRole(role);
-            console.log("Pinia的Token: ", authorizationStore.token)
-            console.log("Pinia的Role: ", authorizationStore.role)
 
             loginResponseMessage.value = response.data.message;
             loginSucceed.value = true;
             loginFail.value = false;
 
-            console.log(response);
-            console.log('Token from headers:', token);
-            console.log('Role from response:', role);
-            await router.push('/SuperAdminDashboard');
+            // 先加载动态路由
+            await loadDynamicRoutes(router);
+
+            // 跳转到角色对应的页面
+            await redirectToRolePage(role);
         } catch (error: any) {
-            loginResponseMessage.value = error.response.data.message;
+            loginResponseMessage.value = error?.response?.data?.message || "登录失败";
             loginFail.value = true;
             loginSucceed.value = false;
+            console.error("登录失败:", error);
 
-            console.log('登录失败！', error);
-            await updateCaptcha();
+            // 更新验证码
+            await loadCaptcha();
         } finally {
             loading.value = false;
-        }
-    };
-
-    const captchaImageUrl = ref<string>("");
-    const loadCaptcha = async () => {
-        try {
-            captchaImageUrl.value = await getCaptchaImage();
-        } catch (error) {
-            console.error("加载验证码失败:", error);
         }
     };
 
@@ -77,5 +73,5 @@ export default function useLoginForm() {
         loginFail,
         captchaImageUrl,
         updateCaptcha,
-    }
+    };
 }

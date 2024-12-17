@@ -1,8 +1,8 @@
 import {reactive, ref} from "vue";
 import type {User} from "@/types/Data.ts";
 import {putRequest} from "@/services/api.ts";
-import {useUserList} from "@/hooks/useUserList.ts";
-import {useUserFormValidation} from "@/hooks/useUserFormValidation.ts";
+import {useUserList} from "@/hooks/user/useUserList.ts";
+import {useUserFormValidation} from "@/hooks/user/useUserFormValidation.ts";
 
 export function useUserEdit() {
     const editDialogFormVisible = ref<boolean>(false);

@@ -136,7 +136,7 @@
 <script setup lang="ts">
 import {Box, DataAnalysis, DataLine, Goods, Lock, OfficeBuilding,
   User, UserFilled, Van, Avatar} from '@element-plus/icons-vue'
-import {useMenu} from "@/hooks/useMenu.ts";
+import {useMenu} from "@/hooks/system/useMenu.ts";
 
 const { handleMenuSelect, handleLogout } = useMenu();
 </script>
