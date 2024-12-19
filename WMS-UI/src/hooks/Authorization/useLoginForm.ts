@@ -1,11 +1,9 @@
 // src/hooks/useLoginForm.ts
-import { reactive, ref } from "vue";
-import { postRequest } from "@/services/api.ts";
-import { useAuthorizationStore } from "@/stores/authorizationStore.ts";
-import { useCaptcha } from "@/hooks/Authorization/useCaptcha.ts";
-import { loadDynamicRoutes } from "@/hooks/Authorization/useDynamicRoutes.ts";
-import { useRoleRedirect } from "@/hooks/Authorization/useRoleRedirect.ts";
-import router from "@/router";
+import {reactive, ref} from "vue";
+import {postRequest} from "@/services/api.ts";
+import {useAuthorizationStore} from "@/stores/authorizationStore.ts";
+import {useCaptcha} from "@/hooks/Authorization/useCaptcha.ts";
+import {useRoleRedirect} from "@/hooks/Authorization/useRoleRedirect.ts";
 
 export default function useLoginForm() {
     const loginForm = reactive({
@@ -35,6 +33,7 @@ export default function useLoginForm() {
             const token = response.headers['authorization'];
             const role = response.headers['role'];
 
+
             authorizationStore.setToken(token);
             authorizationStore.setRole(role);
 
@@ -42,10 +41,6 @@ export default function useLoginForm() {
             loginSucceed.value = true;
             loginFail.value = false;
 
-            // 先加载动态路由
-            await loadDynamicRoutes(router);
-
-            // 跳转到角色对应的页面
             await redirectToRolePage(role);
         } catch (error: any) {
             loginResponseMessage.value = error?.response?.data?.message || "登录失败";

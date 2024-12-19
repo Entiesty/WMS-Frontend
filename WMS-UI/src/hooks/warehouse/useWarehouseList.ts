@@ -1,4 +1,4 @@
-import type {User, Warehouse} from "@/types/Data.ts";
+import type {Warehouse} from "@/types/Data.ts";
 import {usePagedData} from "@/hooks/system/usePagedData.ts";
 
 export function useWarehouseList() {

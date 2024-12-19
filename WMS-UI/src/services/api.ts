@@ -19,7 +19,6 @@ api.interceptors.request.use(
         const token = authorizationStore.token; // 从 Pinia store 获取 token
 
         if (token) {
-            console.log('请求拦截器', token);
             config.headers.authorization = `Bearer ${token}`;
         }
 

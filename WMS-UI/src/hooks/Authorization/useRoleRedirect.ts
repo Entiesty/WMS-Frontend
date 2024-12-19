@@ -8,11 +8,11 @@ export function useRoleRedirect() {
     const getRedirectPathByRole = (role: string): string => {
         const roleRedirectMap: { [key: string]: string } = {
             'super_admin': '/SuperAdminDashboard',
-            'information_manager': '/InformationDashboard',
+            'information_manager': '/InformationManagerDashboard',
             // 其他角色及对应的路径
         };
 
-        return roleRedirectMap[role] || '/DefaultDashboard';  // 默认跳转路径
+        return roleRedirectMap[role] || '/';  // 默认跳转路径
     };
 
     // 跳转到对应页面

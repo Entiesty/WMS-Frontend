@@ -12,6 +12,9 @@ export function useMenu() {
             case "1-1":
                 void router.push("/SuperAdminDashboard/userList");
                 break;
+            case "4-1":
+                void router.push("/SuperAdminDashboard/warehouseList");
+                break;
             // 可以根据需要添加更多菜单选项
             default:
                 console.warn(`Unhandled menu index: ${index}`);

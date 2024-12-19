@@ -17,9 +17,9 @@ export interface User {
 }
 
 export interface Warehouse {
-    id: number,
-    name: string,
+    id?: number,
+    warehouseName: string,
     location: string,
-    createdAt: string,
-    updatedAt: string,
+    createdAt?: string,
+    updatedAt?: string,
 }
