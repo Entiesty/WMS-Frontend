@@ -1,7 +1,17 @@
 <template>
   <el-card>
     <el-button type="primary" @click="addWarehouse">新增</el-button>
-    <el-table :data="records" border fit>
+    <el-select
+        v-model="selectColumn">
+      <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+      ></el-option>
+    </el-select>
+    <el-input v-model="searchQuery" size="small" placeholder="Type to search" />
+    <el-table :data="filteredRecords" border fit>
       <el-table-column prop="id" label="Id" align="center"/>
       <el-table-column prop="warehouseName" label="warehouseName" align="center"/>
       <el-table-column prop="location" label="location" align="center"/>
@@ -83,6 +93,7 @@ import {useWarehouseEdit} from "@/hooks/warehouse/useWarehouseEdit.ts";
 import {useWarehouseDelete} from "@/hooks/warehouse/useWarehouseDelete.ts";
 import {useWarehouseAdd} from "@/hooks/warehouse/useWarehouseAdd.ts";
 import {useWarehouseFormValidation} from "@/hooks/warehouse/useWarehouseFormValidation.ts";
+import {computed, ref} from "vue";
 
 // 使用用户列表相关逻辑
 const {records, total, queryPageParam, fetchData, handleCurrentChange} = useWarehouseList();
@@ -107,6 +118,33 @@ const validateBeforeSubmit = () => {
     }
   });
 };
+
+const searchQuery = ref<string>('');
+const selectColumn = ref<string>('warehouseName')
+const filteredRecords = computed(() => {
+  if (!searchQuery.value) {
+    return records.value;
+  }
+  if(selectColumn.value === 'warehouseName')
+    return records.value.filter(record => {
+      return record.warehouseName.toString().toLowerCase().includes(searchQuery.value.toLowerCase());
+    });
+  else if(selectColumn.value === 'location')
+    return records.value.filter(record => {
+      return record.location.toString().toLowerCase().includes(searchQuery.value.toLowerCase());
+    });
+});
+
+const options = [
+  {
+    value: 'warehouseName',
+    label: '仓库名称'
+  },
+  {
+    value: 'location',
+    label: '位置'
+  }
+];
 
 </script>
 

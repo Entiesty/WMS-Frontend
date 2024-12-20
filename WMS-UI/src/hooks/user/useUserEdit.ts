@@ -12,9 +12,9 @@ export function useUserEdit() {
     });
     const {fetchData} = useUserList();
     const userStore =  useUserStore();
-    const addOrEdit = useAddOrEdit();
 
     const editUser = (row: User) => {
+        const addOrEdit = useAddOrEdit();
         console.log('这是row', row);
         userStore.setCurrentUser(row);
         console.log('这是currentUser', userStore.currentUser);

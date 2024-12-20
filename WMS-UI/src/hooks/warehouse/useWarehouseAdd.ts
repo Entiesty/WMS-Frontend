@@ -1,6 +1,7 @@
 // hooks/warehouse/useWarehouseAdd.ts
 import {reactive, ref} from "vue";
-import {postRequest} from "@/services/api.ts"; // 引入post请求
+import {postRequest} from "@/services/api.ts";
+import {useAddOrEdit} from "@/stores/addOrEdit.ts"; // 引入post请求
 
 export function useWarehouseAdd() {
     const addDialogFormVisible = ref<boolean>(false); // 控制对话框的显示与隐藏
@@ -11,9 +12,12 @@ export function useWarehouseAdd() {
         updatedAt: new Date().toISOString().slice(0, 19).replace('T', ' ')  // 格式化为 yyyy-mm-dd hh:mm:ss
     }); // 用于存储新增仓库的数据
 
+
     // 提交新增仓库请求
     const addWarehouse = () => {
+        const addOrEdit = useAddOrEdit();
         addDialogFormVisible.value = true;
+        addOrEdit.setAddOrEdit('add');
     };
 
     const confirmAddWarehouse = async () => {

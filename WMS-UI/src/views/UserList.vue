@@ -1,7 +1,17 @@
 <template>
   <el-card>
     <el-button type="primary" @click="addUser">新增</el-button>
-    <el-table :data="records" border fit>
+    <el-select
+    v-model="selectColumn">
+      <el-option
+      v-for="item in options"
+      :key="item.value"
+      :label="item.label"
+      :value="item.value"
+      ></el-option>
+    </el-select>
+    <el-input v-model="searchQuery" size="small" placeholder="Type to search" />
+    <el-table :data="filteredRecords" border fit>
       <el-table-column prop="id" label="Id" align="center"/>
       <el-table-column prop="userName" label="UserName" align="center"/>
       <el-table-column prop="password" label="Password" align="center"/>
@@ -109,7 +119,7 @@ import {useUserList} from "@/hooks/user/useUserList.ts";
 import {useUserEdit} from "@/hooks/user/useUserEdit.ts";
 import {useUserFormValidation} from "@/hooks/user/useUserFormValidation.ts";
 import {useUserDelete} from "@/hooks/user/useUserDelete.ts";
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import {useUserAdd} from "@/hooks/user/useUserAdd.ts";
 
 // 使用用户列表相关逻辑
@@ -145,6 +155,42 @@ const validateBeforeSubmit = () => {
     }
   });
 };
+
+const searchQuery = ref<string>('');
+const selectColumn = ref<string>('userName')
+const filteredRecords = computed(() => {
+  if (!searchQuery.value) {
+    return records.value;
+  }
+  if(selectColumn.value === 'userName')
+    return records.value.filter(record => {
+      return record.userName.toString().toLowerCase().includes(searchQuery.value.toLowerCase());
+    });
+  else if(selectColumn.value === 'role')
+    return records.value.filter(record => {
+      return record.role.toLowerCase().includes(searchQuery.value.toLowerCase());
+    });
+  else if(selectColumn.value === 'status')
+    return records.value.filter(record => {
+      return record.status.toLowerCase().includes(searchQuery.value.toLowerCase());
+    });
+});
+
+const options = [
+  {
+    value: 'userName',
+    label: '用户名'
+  },
+  {
+    value: 'role',
+    label: '角色'
+  },
+  {
+    value: 'status',
+    label: '状态'
+  },
+]
+
 </script>
 
 <style scoped>

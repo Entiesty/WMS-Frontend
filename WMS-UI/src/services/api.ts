@@ -32,29 +32,29 @@ api.interceptors.request.use(
 );
 
 
-api.interceptors.response.use(
-    (response) => response,
-    async (error) => {
-        if (error.response && error.response.status === 403) {
-            try {
-                const authorizationStore = useAuthorizationStore();
-                // 弹窗提示用户登录过期
-                await ElMessageBox.alert("登录信息已过期，请重新登录", "提示", {
-                    confirmButtonText: "确定",
-                    type: "warning",
-                });
-
-                // 弹窗关闭后清除 token 并跳转到登录页面
-                authorizationStore.clearToken();
-                await router.push("/");
-            } catch (e) {
-                // 如果弹窗被取消或有其他异常，可以处理
-                console.error(e);
-            }
-        }
-        return Promise.reject(error);
-    }
-);
+// api.interceptors.response.use(
+//     (response) => response,
+//     async (error) => {
+//         if (error.response && error.response.status === 403) {
+//             try {
+//                 const authorizationStore = useAuthorizationStore();
+//                 // 弹窗提示用户登录过期
+//                 await ElMessageBox.alert("登录信息已过期，请重新登录", "提示", {
+//                     confirmButtonText: "确定",
+//                     type: "warning",
+//                 });
+//
+//                 // 弹窗关闭后清除 token 并跳转到登录页面
+//                 authorizationStore.clearToken();
+//                 await router.push("/");
+//             } catch (e) {
+//                 // 如果弹窗被取消或有其他异常，可以处理
+//                 console.error(e);
+//             }
+//         }
+//         return Promise.reject(error);
+//     }
+// );
 
 
 const request = async (method: "get" | "post" | "put" | "delete", url: string, data?: object) => {

@@ -12,10 +12,10 @@ export function useWarehouseFormValidation() {
         location: '',
     });
     const warehouseStore = useWarehouseStore(); // 如果有仓库Store，可在此使用
-    const addOrEdit = useAddOrEdit().addOrEdit;
 
     // 仓库名的校验规则
     const checkWarehouseName = async (rule: any, value: string, callback: Function) => {
+        const addOrEdit = useAddOrEdit().addOrEdit;
         if (warehouseStore.currentWarehouse) {
             ruleForm.id = warehouseStore.currentWarehouse.id!;
             ruleForm.warehouseName = warehouseStore.currentWarehouse.warehouseName;
@@ -23,6 +23,7 @@ export function useWarehouseFormValidation() {
         }
         console.log('这是value', value);
         console.log('这是ruleForm', ruleForm);
+        console.log('这是addOrEdit', addOrEdit);
 
 
         if (!value) {
@@ -60,7 +61,7 @@ export function useWarehouseFormValidation() {
         location: [
             { required: true, message: '位置不能为空', trigger: 'blur' },
             // 允许包含字母、数字、汉字、空格、"-"和"_"
-            { pattern: /^[a-zA-Z0-9\s\u4e00-\u9fa5-_]{5,100}$/, message: '位置只能包含字母、数字、汉字、空格、"-"和"_"，长度为5到100个字符', trigger: 'blur' }
+            { pattern: /^[a-zA-Z0-9\s\u4e00-\u9fa5-_]{2,100}$/, message: '位置只能包含字母、数字、汉字、空格、"-"和"_"，长度为5到100个字符', trigger: 'blur' }
         ]
     });
 

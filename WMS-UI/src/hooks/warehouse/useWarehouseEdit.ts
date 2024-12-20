@@ -3,6 +3,7 @@ import type {Warehouse} from "@/types/Data.ts";
 import {putRequest} from "@/services/api.ts";
 import {useWarehouseList} from "@/hooks/warehouse/useWarehouseList.ts";
 import {useWarehouseStore} from "@/stores/warehouseStore.ts";
+import {useAddOrEdit} from "@/stores/addOrEdit.ts";
 
 export function useWarehouseEdit() {
     const editDialogFormVisible = ref<boolean>(false);
@@ -13,11 +14,13 @@ export function useWarehouseEdit() {
     const warehouseStore =  useWarehouseStore();
 
     const editWarehouse = (row: Warehouse) => {
+        const addOrEdit = useAddOrEdit();
         console.log('这是row', row);
         warehouseStore.setCurrentWarehouse(row);
         console.log('currentWarehouse', warehouseStore.currentWarehouse);
         Object.assign(warehouse, row);
         editDialogFormVisible.value = true;
+        addOrEdit.setAddOrEdit('edit');
     };
 
     const confirmUpdate = async () => {

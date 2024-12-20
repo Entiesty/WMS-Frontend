@@ -23,3 +23,19 @@ export interface Warehouse {
     createdAt?: string,
     updatedAt?: string,
 }
+
+export interface ItemCategory {
+    id: number,
+    itemCategoryName: string,
+    itemCategoryDescription: string,
+}
+
+export interface Item {
+    id: number,
+    itemName: string,
+    price: number,
+    imageUrl: string,
+    stock: number,
+    itemCategoryId: number,
+    warehouseId: number,
+}

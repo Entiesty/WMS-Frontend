@@ -9,11 +9,20 @@ export function useMenu() {
 
     const handleMenuSelect = (index: string) => {
         switch (index) {
-            case "1-1":
+            case '1-1':
                 void router.push("/SuperAdminDashboard/userList");
                 break;
-            case "4-1":
+            case '2-1':
+                void router.push("/SuperAdminDashboard/personalInformation");
+                break;
+            case '4-1':
                 void router.push("/SuperAdminDashboard/warehouseList");
+                break;
+            case '5-1':
+                void router.push("/SuperAdminDashboard/itemCategoryList");
+                break;
+            case '5-2':
+                void router.push("/SuperAdminDashboard/itemList");
                 break;
             // 可以根据需要添加更多菜单选项
             default:

@@ -12,15 +12,17 @@ export function useUserFormValidation() {
         password: '',
     });
     const userStore = useUserStore();
-    const addOrEdit = useAddOrEdit().addOrEdit;
 
     const checkUserName = async (rule: any, value: string, callback: Function) => {
+        const addOrEdit = useAddOrEdit().addOrEdit;
         if (userStore.currentUser) {
             ruleForm.id = userStore.currentUser.id;
             ruleForm.userName = userStore.currentUser.userName;
             ruleForm.password = userStore.currentUser.password;
         }
         console.log('这是value', value);
+        console.log('这是addOrEdit', addOrEdit);
+        console.log('这是addOrEdit', addOrEdit);
 
         if (!value) {
             return callback(new Error('用户名不能为空'));

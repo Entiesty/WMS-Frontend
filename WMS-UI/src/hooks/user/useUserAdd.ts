@@ -14,9 +14,9 @@ export function useUserAdd() {
         updatedAt: new Date().toISOString().slice(0, 19).replace('T', ' ')  // 格式化为 yyyy-mm-dd hh:mm:ss
     }); // 用于存储新增仓库的数据
 
-    const addOrEdit = useAddOrEdit();
     // 提交新增仓库请求
     const addUser = () => {
+        const addOrEdit = useAddOrEdit();
         addDialogFormVisible.value = true;
         addOrEdit.setAddOrEdit('add');
     };

@@ -23,6 +23,21 @@ const staticRoutes: Array<RouteRecordRaw> = [
                 path: 'warehouseList',
                 name: 'WarehouseList',
                 component: () => import('@/views/WarehouseList.vue')
+            },
+            {
+                path: 'personalInformation',
+                name: 'PersonalInformation',
+                component: () => import('@/views/PersonalInformation.vue')
+            },
+            {
+                path: 'itemCategoryList',
+                name: 'ItemCategoryList',
+                component: () => import('@/views/ItemCategoryList.vue')
+            },
+            {
+                path: 'item',
+                name: 'Item',
+                component: () =>import('@/views/ItemList.vue')
             }
         ]
     },

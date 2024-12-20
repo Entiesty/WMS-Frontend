@@ -32,14 +32,18 @@ export default function useLoginForm() {
             const response = await postRequest('/authorization/login', loginForm);
             const token = response.headers['authorization'];
             const role = response.headers['role'];
+            const userName = response.headers['username'];
 
 
             authorizationStore.setToken(token);
             authorizationStore.setRole(role);
+            authorizationStore.setUserName(userName);
 
             loginResponseMessage.value = response.data.message;
             loginSucceed.value = true;
             loginFail.value = false;
+
+            console.log("登录成功:", response);
 
             await redirectToRolePage(role);
         } catch (error: any) {
