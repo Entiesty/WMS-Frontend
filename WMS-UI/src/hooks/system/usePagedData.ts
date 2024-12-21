@@ -19,6 +19,7 @@ export function usePagedData<T>(apiUrl: string, initialParams: object = {}) {
             const response = await postRequest(apiUrl, queryPageParam);
             records.value = response.data.records;
             total.value = response.data.total;
+            console.log('分页数据', response.data);
         } catch (error) {
             console.error("Error fetching data:", error);
         }

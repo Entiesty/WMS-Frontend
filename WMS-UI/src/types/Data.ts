@@ -17,7 +17,7 @@ export interface User {
 }
 
 export interface Warehouse {
-    id?: number,
+    id: number,
     warehouseName: string,
     location: string,
     createdAt?: string,
@@ -36,6 +36,6 @@ export interface Item {
     price: number,
     imageUrl: string,
     stock: number,
-    itemCategoryId: number,
-    warehouseId: number,
+    itemCategoryName: string,
+    warehouseName: string,
 }

@@ -73,10 +73,9 @@ const validateBeforeSubmit = () => {
   });
 };
 
-const editOrAdd = useAddOrEdit();
-
 // 在组件挂载时获取用户数据
 onMounted(() => {
+  const editOrAdd = useAddOrEdit();
   editOrAdd.setAddOrEdit('edit')
   fetchUserData();
 });
