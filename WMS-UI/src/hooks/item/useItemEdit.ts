@@ -19,9 +19,14 @@ export function useItemEdit() {
         itemStore.setCurrentItem(row);  // 设置当前编辑的 Item
         console.log('这是currentItem', itemStore.currentItem);
         Object.assign(item, row);
+        item.itemName = removeOuterParentheses(item.itemName);
         editDialogFormVisible.value = true;
         addOrEdit.setAddOrEdit('edit');
     };
+
+    function removeOuterParentheses(str: string): string {
+        return str.replace(/\(\s*[^()]*\s*\)$/, "");
+    }
 
     const confirmUpdate = async () => {
         const payload = {
@@ -35,6 +40,7 @@ export function useItemEdit() {
         };
 
         try {
+            payload.itemName += '(' + payload.warehouseName + ')';
             await putRequest('/item', payload);  // 修改请求路径为 /item
             console.log('Item updated successfully.');
             editDialogFormVisible.value = false;

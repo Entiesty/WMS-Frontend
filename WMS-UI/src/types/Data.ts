@@ -39,3 +39,14 @@ export interface Item {
     itemCategoryName: string,
     warehouseName: string,
 }
+
+export interface StockTransaction {
+    id: number,
+    itemName: string,
+    quantity: number,
+    transactionType: string,
+    sourceWarehouseName?: string,
+    targetWarehouseName: string,
+    operatorName: string,
+    transactionTime: string,
+}

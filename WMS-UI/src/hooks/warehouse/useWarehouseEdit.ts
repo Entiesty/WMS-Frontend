@@ -8,7 +8,7 @@ import {useAddOrEdit} from "@/stores/addOrEdit.ts";
 export function useWarehouseEdit() {
     const editDialogFormVisible = ref<boolean>(false);
     const warehouse = reactive<Warehouse>({
-        id: 0,warehouseName:'', location: '', createdAt: '', updatedAt: ''
+        id: 0,sourceWarehouseName:'', location: '', createdAt: '', updatedAt: ''
     });
     const {fetchData} = useWarehouseList();
     const warehouseStore =  useWarehouseStore();

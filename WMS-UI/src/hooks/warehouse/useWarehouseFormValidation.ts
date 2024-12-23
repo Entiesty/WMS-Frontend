@@ -53,7 +53,7 @@ export function useWarehouseFormValidation() {
 
     // 校验规则
     const rules = reactive<FormRules<typeof ruleForm>>({
-        warehouseName: [
+        sourceWarehouseName: [
             { required: true, message: '仓库名称不能为空', trigger: 'blur' },
             { asyncValidator: checkWarehouseName, trigger: 'blur' },
             { pattern: /^[a-zA-Z0-9\s\u4e00-\u9fa5-_]{3,50}$/, message: '仓库名称只能包含字母、数字、汉字、空格、"-"和"_"，长度为3到50个字符', trigger: 'blur' }

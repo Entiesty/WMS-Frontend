@@ -38,6 +38,11 @@ const staticRoutes: Array<RouteRecordRaw> = [
                 path: 'itemList',
                 name: 'ItemList',
                 component: () =>import('@/views/ItemList.vue')
+            },
+            {
+                path: 'stockTransactionList',
+                name: 'StockTransactionList',
+                component: () => import('@/views/StockTransactionList.vue')
             }
         ]
     },

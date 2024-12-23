@@ -1,7 +1,7 @@
-import { reactive, ref } from "vue";
-import { postRequest } from "@/services/api.ts"; // 引入post请求
-import { useAddOrEdit } from "@/stores/addOrEdit.ts";
-import type {Item} from "@/types/Data.ts"; // 引入控制新增或编辑状态的 store
+import {reactive, ref} from "vue";
+import {postRequest} from "@/services/api.ts"; // 引入post请求
+import {useAddOrEdit} from "@/stores/addOrEdit.ts";
+import {ElMessage} from "element-plus";
 
 export function useItemAdd() {
     const addDialogFormVisible = ref<boolean>(false); // 控制对话框的显示与隐藏
@@ -9,8 +9,8 @@ export function useItemAdd() {
         itemName: '',          // 商品名称
         price: 0,              // 商品价格
         stock: 0,              // 商品库存
-        itemCategoryName: '',     // 商品类别ID
-        warehouseName: '',         // 仓库ID
+        itemCategoryName: '',     // 商品类别
+        warehouseName: '',         // 仓库
         imageUrl: ''
     }); // 用于存储新增商品的数据
 
@@ -24,6 +24,7 @@ export function useItemAdd() {
     const confirmAddItem = async () => {
         try {
             // 发送 post 请求以新增商品
+            newItem.itemName += '(' + newItem.warehouseName + ')';
             const response = await postRequest('/item', newItem);
             console.log('Item added successfully:', response);
 
@@ -37,12 +38,19 @@ export function useItemAdd() {
             newItem.imageUrl = '';
         } catch (error) {
             console.error('Failed to add item:', error);
+            ElMessage.error('新增商品失败,请填写仓库和货品类别！');
         }
     };
 
     // 关闭对话框
     const closeAddDialog = () => {
         addDialogFormVisible.value = false;
+        newItem.itemName = '';
+        newItem.price = 0;
+        newItem.stock = 0;
+        newItem.itemCategoryName = ''
+        newItem.warehouseName = '';
+        newItem.imageUrl = '';
     };
 
     return {

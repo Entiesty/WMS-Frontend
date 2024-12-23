@@ -24,7 +24,9 @@ export function useMenu() {
             case '5-2':
                 void router.push("/SuperAdminDashboard/itemList");
                 break;
-            // 可以根据需要添加更多菜单选项
+            case '6-1':
+                void router.push("/SuperAdminDashboard/stockTransactionList");
+                break;
             default:
                 console.warn(`Unhandled menu index: ${index}`);
         }

@@ -3,6 +3,7 @@ import type { FormInstance, FormRules } from "element-plus";
 import { getRequest } from "@/services/api.ts";
 import { useItemStore } from "@/stores/itemStore.ts";  // 使用 Item store
 import { useAddOrEdit } from "@/stores/addOrEdit.ts";
+import {useWarehouseName} from "@/stores/warehouseName.ts";
 
 export function useItemFormValidation() {
     const ruleFormRef = ref<FormInstance>();
@@ -11,6 +12,9 @@ export function useItemFormValidation() {
         itemName: '',
         price: 0,
         stock: 0,
+        itemCategoryName: '',
+        warehouseName: '',
+        imageUrl: ''
     });
     const itemStore = useItemStore();
 
@@ -29,12 +33,17 @@ export function useItemFormValidation() {
             return callback(new Error('商品名称不能为空'));
         }
 
+
         try {
+            const warehouseName = useWarehouseName();
+            const currentWarehouseName = warehouseName.currentWarehouseName;
+            const newValue = value + '(' + currentWarehouseName + ')';
+
             let response: any;
             if (addOrEdit === 'edit') {
                 response = await getRequest(`/item/validate-item-name/update?itemName=${value}&itemId=${ruleForm.id}`);
             } else {
-                response = await getRequest(`/item/validate-item-name/add?itemName=${value}`);
+                response = await getRequest(`/item/validate-item-name/add?itemName=${newValue}`);
             }
             if (response.status === 409) {
                 callback(new Error('商品名称已存在'));
@@ -54,7 +63,7 @@ export function useItemFormValidation() {
         itemName: [
             { required: true, message: '商品名称不能为空', trigger: 'blur' },
             { asyncValidator: checkItemName, trigger: 'blur' },
-            { pattern: /^[a-zA-Z0-9\u4e00-\u9fa5]{3,50}$/, message: '商品名称只能包含字母、数字和中文，长度为3到50个字符', trigger: 'blur' }
+            { pattern: /^[a-zA-Z0-9\s\u4e00-\u9fa5-_]{3,50}$/, message: '商品名称只能包含字母、数字、汉字、空格、"-"和"_"，长度为3到50个字符', trigger: 'blur' }
         ],
         price: [
             { required: true, message: '价格不能为空', trigger: 'blur' },
@@ -63,6 +72,15 @@ export function useItemFormValidation() {
         stock: [
             { required: true, message: '库存不能为空', trigger: 'blur' },
             { pattern: /^[1-9]\d*$/, message: '库存必须是正整数', trigger: 'blur' }
+        ],
+        itemCategoryName: [
+            { required: true, message: '商品类别不能为空', trigger: 'change' }
+        ],
+        warehouseName: [
+            { required: true, message: '仓库不能为空', trigger: 'blur' }
+        ],
+        imageUrl: [
+            { required: true, message: '图片地址不能为空', trigger: 'blur' }
         ]
     });
 

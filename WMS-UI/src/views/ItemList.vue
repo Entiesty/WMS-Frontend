@@ -148,6 +148,22 @@
         </el-select>
       </el-form-item>
     </el-form>
+    <!-- 图片上传 -->
+    <el-form-item label="商品图片" :label-width="formLabelWidth">
+      <el-upload
+          action="http://localhost:8080/api/upload"
+          :headers="{
+    'authorization': 'Bearer ' + token}"
+          :on-success="handleImageSuccess"
+          :on-remove="handleRemove"
+          :file-list="imageList"
+          accept="image/*"
+          list-type="picture-card"
+          :limit="1"
+      >
+        <i class="el-icon-plus"></i>
+      </el-upload>
+    </el-form-item>
 
     <template #footer>
       <el-button @click="closeEditDialog">取消</el-button>
@@ -163,11 +179,13 @@ import {useItemList} from "@/hooks/item/useItemList";
 import {useItemEdit} from "@/hooks/item/useItemEdit";
 import {useItemFormValidation} from "@/hooks/item/useItemFormValidation";
 import {useItemDelete} from "@/hooks/item/useItemDelete";
-import {computed, onMounted, ref} from "vue";
+import {computed, onMounted, ref, watch} from "vue";
 import {useItemAdd} from "@/hooks/item/useItemAdd";
 import type {ItemCategory, Warehouse} from "@/types/Data.ts";
 import {getRequest} from "@/services/api.ts";
 import {useAuthorizationStore} from "@/stores/authorizationStore.ts";
+import {useWarehouseName} from "@/stores/warehouseName.ts";
+import {useAddOrEdit} from "@/stores/addOrEdit.ts";
 
 // 使用商品列表相关逻辑
 const {records, total, queryPageParam, fetchData, handleCurrentChange} = useItemList();
@@ -191,12 +209,27 @@ const warehouses = ref<Warehouse[]>();
 let imageList = ref<any[]>([]);
 const authorizationStore = useAuthorizationStore();
 const token = authorizationStore.token;
+const warehouseName = useWarehouseName();
+watch(newItem, (newValue) => {
+  if (newItem.warehouseName) {
+    warehouseName.setCurrentWarehouseName(newValue.warehouseName)
+    console.log('newValue', newValue.warehouseName);
+    console.log(warehouseName.currentWarehouseName);
+  }
+})
+
+const addOrEdit = useAddOrEdit().addOrEdit;
+
 
 // 处理上传成功后的回调
 const handleImageSuccess = (response: any, file: any, fileList: any) => {
   console.log('response', response);
   // 假设返回的图片路径是 response.url
-  newItem.imageUrl = response.imageUrl;
+  if(addOrEdit === 'add'){
+    newItem.imageUrl = response.imageUrl;
+  } else {
+    item.imageUrl = response.imageUrl;
+  }
 };
 
 // 删除图片时清空图片 URL
