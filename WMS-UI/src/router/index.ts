@@ -2,6 +2,7 @@ import type {RouteRecordRaw} from "vue-router";
 import {createRouter, createWebHistory, type Router} from "vue-router";
 import {useAuthorizationStore} from "@/stores/authorizationStore.ts";
 import {ElMessage} from "element-plus";
+import StockFlowChart from "@/views/StockFlowChart.vue";
 
 const staticRoutes: Array<RouteRecordRaw> = [
     {
@@ -43,7 +44,12 @@ const staticRoutes: Array<RouteRecordRaw> = [
                 path: 'stockTransactionList',
                 name: 'StockTransactionList',
                 component: () => import('@/views/StockTransactionList.vue')
-            }
+            },
+            {
+                path:'stockFlowChart',
+                name: 'StockFlowChart',
+                component: StockFlowChart
+            },
         ]
     },
 ];

@@ -91,16 +91,12 @@ export const getCaptchaImage = async (): Promise<string> => {
     }
 };
 
-// 获取图片请求，返回图片的 Blob URL
-export const getImageRequest = async (imageUrl: string) => {
-    try {
-        // 发送 GET 请求，获取图片数据，设置 responseType 为 'blob' 用来接收图片
-        const response = await api.get(imageUrl, { responseType: "blob" });
+export const fetchDailyStockData = async (startDate:string, endDate:string) => {
+    const response = await postRequest("/api/statistics/daily-stock", { startDate, endDate });
+    return response.data;
+};
 
-        // 使用 URL.createObjectURL 创建一个浏览器可访问的图片 URL
-        return URL.createObjectURL(response.data);
-    } catch (error) {
-        console.error("获取图片失败:", error);
-        throw error; // 抛出异常，调用方可以处理
-    }
+export const fetchTopItemsByQuantity = async (startDate:string, endDate:string) => {
+    const response = await postRequest("/api/statistics/top-items", { startDate, endDate });
+    return response.data;
 };
