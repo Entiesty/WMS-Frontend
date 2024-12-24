@@ -61,7 +61,7 @@ const fetchDailyOutStockData = async (startDate: string, endDate: string): Promi
   }
 };
 
-const value = ref([]);  // 绑定日期选择器的值
+const value = ref([new Date('2024-01-01'), new Date('2025-01-01')]);  // 设置默认日期范围
 const dailyStockChart = ref<HTMLElement | null>(null);  // 引用图表的 DOM 元素，允许为 null
 
 // 初始化图表数据结构并显式指定类型
@@ -143,47 +143,51 @@ watch(value, async (newVal) => {
 
 // 在组件挂载后初始渲染图表
 onMounted(async () => {
-  if (startDate.value && endDate.value) {
-    const [inData, outData] = await Promise.all([
-      fetchDailyInStockData(startDate.value, endDate.value),
-      fetchDailyOutStockData(startDate.value, endDate.value)
-    ]);
+  // 在组件加载时，主动触发日期选择器的更新逻辑
+  const [start, end] = value.value;  // 使用默认值
+  startDate.value = formatDate(start);  // 格式化开始日期
+  endDate.value = formatDate(end);  // 格式化结束日期
 
-    if (inData && outData) {
-      const xAxisData = inData.map((item: StockData) => item.date);
-      const totalInData = inData.map((item: StockData) => item.totalIn);
-      const totalOutData = outData.map((item: StockData) => item.totalOut);
+  // 获取入库和出库数据
+  const [inData, outData] = await Promise.all([
+    fetchDailyInStockData(startDate.value, endDate.value),
+    fetchDailyOutStockData(startDate.value, endDate.value)
+  ]);
 
-      chartData.value.xAxisData = xAxisData;
-      chartData.value.seriesData[0].data = totalInData;
-      chartData.value.seriesData[1].data = totalOutData;
+  if (inData && outData) {
+    const xAxisData = inData.map((item: StockData) => item.date);
+    const totalInData = inData.map((item: StockData) => item.totalIn);
+    const totalOutData = outData.map((item: StockData) => item.totalOut);
 
-      if (dailyStockChart.value) {
-        let myChart = echarts.getInstanceByDom(dailyStockChart.value as HTMLElement);
-        if (!myChart) {
-          myChart = echarts.init(dailyStockChart.value as HTMLElement);
-        }
+    chartData.value.xAxisData = xAxisData;
+    chartData.value.seriesData[0].data = totalInData;
+    chartData.value.seriesData[1].data = totalOutData;
 
-        myChart.setOption({
-          title: {
-            text: '每天货品进出情况'
-          },
-          tooltip: {
-            trigger: 'axis'
-          },
-          legend: {
-            data: ['总入库', '总出库']
-          },
-          xAxis: {
-            type: 'category',
-            data: chartData.value.xAxisData
-          },
-          yAxis: {
-            type: 'value'
-          },
-          series: chartData.value.seriesData
-        });
+    if (dailyStockChart.value) {
+      let myChart = echarts.getInstanceByDom(dailyStockChart.value as HTMLElement);
+      if (!myChart) {
+        myChart = echarts.init(dailyStockChart.value as HTMLElement);
       }
+
+      myChart.setOption({
+        title: {
+          text: '每天货品进出情况'
+        },
+        tooltip: {
+          trigger: 'axis'
+        },
+        legend: {
+          data: ['总入库', '总出库']
+        },
+        xAxis: {
+          type: 'category',
+          data: chartData.value.xAxisData
+        },
+        yAxis: {
+          type: 'value'
+        },
+        series: chartData.value.seriesData
+      });
     }
   }
 });

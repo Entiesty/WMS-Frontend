@@ -15,6 +15,9 @@ export function useMenu() {
             case '2-1':
                 void router.push("/SuperAdminDashboard/personalInformation");
                 break;
+            case '3-1':
+                void router.push("/SuperAdminDashboard/enterpriseInformation");
+                break;
             case '4-1':
                 void router.push("/SuperAdminDashboard/warehouseList");
                 break;
@@ -29,6 +32,9 @@ export function useMenu() {
                 break;
             case '8-1':
                 void router.push("/SuperAdminDashboard/stockFlowChart");
+                break;
+            case '8-2':
+                void router.push("/SuperAdminDashboard/topStockTransactions");
                 break;
             default:
                 console.warn(`Unhandled menu index: ${index}`);

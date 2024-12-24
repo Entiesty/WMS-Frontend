@@ -1,14 +1,18 @@
 <template>
   <div>
-    <el-container style="height: 100vh">
-      <el-aside>
+    <el-container>
+      <!-- Sider -->
+      <el-aside width="250px" :style="{ backgroundColor: 'var(--bg-200)', paddingTop: '20px' }">
         <el-scrollbar>
-          <el-menu @select="handleMenuSelect">
-            <span>仓储管理系统</span>
+          <el-menu @select="handleMenuSelect" :style="{ backgroundColor: 'var(--bg-200)', border: 'none' }" active-text-color="var(--accent-200)">
+            <div style="display: flex; justify-content: center; align-items: center; padding: 10px 0;">
+              <span style="font-size: 18px; color: var(--primary-300); font-weight: 600;">仓储管理系统</span>
+            </div>
+
             <el-sub-menu index="1">
               <template #title>
                 <el-icon>
-                  <User/>
+                  <User />
                 </el-icon>
                 <span>用户管理</span>
               </template>
@@ -22,7 +26,7 @@
             <el-sub-menu index="2">
               <template #title>
                 <el-icon>
-                  <UserFilled/>
+                  <UserFilled />
                 </el-icon>
                 <span>个人信息</span>
               </template>
@@ -33,7 +37,7 @@
             <el-sub-menu index="3">
               <template #title>
                 <el-icon>
-                  <OfficeBuilding/>
+                  <OfficeBuilding />
                 </el-icon>
                 <span>企业信息</span>
               </template>
@@ -43,7 +47,7 @@
             <el-sub-menu index="4">
               <template #title>
                 <el-icon>
-                  <Box/>
+                  <Box />
                 </el-icon>
                 <span>仓库管理</span>
               </template>
@@ -54,7 +58,7 @@
             <el-sub-menu index="5">
               <template #title>
                 <el-icon>
-                  <Goods/>
+                  <Goods />
                 </el-icon>
                 <span>货品管理</span>
               </template>
@@ -66,7 +70,7 @@
             <el-sub-menu index="6">
               <template #title>
                 <el-icon>
-                  <Van/>
+                  <Van />
                 </el-icon>
                 <span>出入库管理</span>
               </template>
@@ -77,7 +81,7 @@
             <el-sub-menu index="7">
               <template #title>
                 <el-icon>
-                  <Lock/>
+                  <Lock />
                 </el-icon>
                 <span>权限管理</span>
               </template>
@@ -88,7 +92,7 @@
             <el-sub-menu index="8">
               <template #title>
                 <el-icon>
-                  <DataAnalysis/>
+                  <DataAnalysis />
                 </el-icon>
                 <span>数据统计</span>
               </template>
@@ -99,7 +103,7 @@
             <el-sub-menu index="9">
               <template #title>
                 <el-icon>
-                  <DataLine/>
+                  <DataLine />
                 </el-icon>
                 <span>仓库统计</span>
               </template>
@@ -110,11 +114,13 @@
         </el-scrollbar>
       </el-aside>
 
+      <!-- Main Content -->
       <el-container>
-        <el-header>
+        <!-- Header -->
+        <el-header :style="{ backgroundColor: 'var(--primary-100)', padding: '10px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }">
           <el-dropdown>
-            <span>Boogiepop</span>
-            <el-icon><Avatar/></el-icon>
+            <span style="font-size: 16px; color: var(--primary-300);">Boogiepop</span>
+            <el-icon><Avatar /></el-icon>
             <template #dropdown>
               <el-dropdown-menu>
                 <el-dropdown-item @click="handleLogout">登出</el-dropdown-item>
@@ -123,9 +129,10 @@
           </el-dropdown>
         </el-header>
 
-        <el-main>
+        <!-- Main Area -->
+        <el-main :style="{ backgroundColor: 'var(--bg-100)', padding: '20px' }">
           <el-scrollbar>
-            <router-view></router-view>
+            <router-view />
           </el-scrollbar>
         </el-main>
       </el-container>
@@ -134,13 +141,49 @@
 </template>
 
 <script setup lang="ts">
-import {Box, DataAnalysis, DataLine, Goods, Lock, OfficeBuilding,
-  User, UserFilled, Van, Avatar} from '@element-plus/icons-vue'
-import {useMenu} from "@/hooks/system/useMenu.ts";
+import { Box, DataAnalysis, DataLine, Goods, Lock, OfficeBuilding, User, UserFilled, Van, Avatar } from '@element-plus/icons-vue'
+import { useMenu } from "@/hooks/system/useMenu.ts";
 
 const { handleMenuSelect, handleLogout } = useMenu();
 </script>
 
 <style scoped>
+/* Custom styles for the new colors */
+:root {
+  --primary-100: #d4eaf7;
+  --primary-200: #b6ccd8;
+  --primary-300: #3b3c3d;
+  --accent-100: #71c4ef;
+  --accent-200: #00668c;
+  --text-100: #1d1c1c;
+  --text-200: #313d44;
+  --bg-100: #fffefb;
+  --bg-200: #f5f4f1;
+  --bg-300: #cccbc8;
+}
 
+.el-menu {
+  background-color: var(--bg-200) !important;
+}
+
+.el-menu-item, .el-sub-menu__title {
+  color: var(--text-200);
+}
+
+.el-menu-item:hover, .el-sub-menu__title:hover {
+  background-color: var(--primary-200);
+  color: var(--primary-300);
+}
+
+.el-header {
+  background-color: var(--primary-100);
+}
+
+.el-main {
+  background-color: var(--bg-100);
+}
+
+.el-dropdown-menu {
+  background-color: var(--bg-200);
+}
 </style>
