@@ -61,6 +61,11 @@ const staticRoutes: Array<RouteRecordRaw> = [
                 path: 'topStockTransactions',
                 name: 'TopStockTransactions',
                 component: TopStockTransactions
+            },
+            {
+                path: 'mainContent',
+                name: 'MainContent',
+                component: () => import('@/views/MainContent.vue')
             }
         ]
     },

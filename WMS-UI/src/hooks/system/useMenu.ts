@@ -9,6 +9,9 @@ export function useMenu() {
 
     const handleMenuSelect = (index: string) => {
         switch (index) {
+            case '0':
+                void router.push("/SuperAdminDashboard/mainContent");
+                break;
             case '1-1':
                 void router.push("/SuperAdminDashboard/userList");
                 break;

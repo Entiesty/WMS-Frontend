@@ -60,7 +60,7 @@ export function useItemCategoryFormValidation() {
         itemCategoryDescription: [
             { required: true, message: '描述不能为空', trigger: 'blur' },
             // 允许包含字母、数字、汉字、空格、"-"和"_"
-            { pattern: /^[a-zA-Z0-9\s\u4e00-\u9fa5-_]{5,100}$/, message: '描述只能包含字母、数字、汉字、空格、"-"和"_"，长度为5到100个字符', trigger: 'blur' }
+            { pattern: /^[a-zA-Z0-9\s\u4e00-\u9fa5-_，。、？！；：“”（）《》【】]{5,100}$/, message: '描述只能包含字母、数字、汉字、空格、"-"、"_"和顿号，长度为5到100个字符', trigger: 'blur' }
         ]
     });
 

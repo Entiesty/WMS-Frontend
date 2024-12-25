@@ -12,7 +12,15 @@
     <el-input v-model="searchQuery" size="small" placeholder="Type to search" />
     <el-table :data="filteredItemCategories" border fit>
       <el-table-column prop="id" label="Id" align="center"/>
-      <el-table-column prop="itemCategoryName" label="类别名称" align="center"/>
+      <el-table-column label="类别名称" align="center">
+        <template #default="scope">
+          <div class="flex justify-center">
+            <el-tag type="primary">
+              {{ scope.row.itemCategoryName }}
+            </el-tag>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column prop="itemCategoryDescription" label="描述" align="center"/>
       <el-table-column label="操作" align="center">
         <template #default="scope">
