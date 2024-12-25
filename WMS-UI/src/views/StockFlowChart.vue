@@ -1,11 +1,13 @@
 <template>
-  <el-date-picker
-      v-model="value"
-      type="daterange"
-      range-separator="To"
-      start-placeholder="Start date"
-      end-placeholder="End date"
-  />
+  <div class="p-6 grid justify-center">
+    <el-date-picker
+        v-model="value"
+        type="daterange"
+        range-separator="To"
+        start-placeholder="Start date"
+        end-placeholder="End date"
+    />
+  </div>
   <div ref="dailyStockChart" style="width: 100%; height: 400px;"></div>
 </template>
 

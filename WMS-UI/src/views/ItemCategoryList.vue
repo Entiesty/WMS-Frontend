@@ -1,15 +1,27 @@
 <template>
   <el-card>
-    <el-button type="primary" @click="addItemCategory">新增类别</el-button>
-    <el-select v-model="selectColumn">
-      <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-      ></el-option>
-    </el-select>
-    <el-input v-model="searchQuery" size="small" placeholder="Type to search" />
+    <!-- 使用 el-row 和 el-col 创建顶部工具栏布局 -->
+    <el-row class="toolbar" justify="center" gutter={20}>
+      <el-col :span="4">
+        <!-- 搜索框 -->
+        <el-input v-model="searchQuery" size="small" placeholder="Type to search" clearable />
+      </el-col>
+      <el-col :span="2">
+        <!-- 下拉选择框 -->
+        <el-select v-model="selectColumn" size="small" placeholder="选择列">
+          <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+          ></el-option>
+        </el-select>
+      </el-col>
+      <el-col :span="2">
+        <!-- 新增按钮 -->
+        <el-button type="primary" @click="addItemCategory" block>新增</el-button>
+      </el-col>
+    </el-row>
     <el-table :data="filteredItemCategories" border fit>
       <el-table-column prop="id" label="Id" align="center"/>
       <el-table-column label="类别名称" align="center">
@@ -147,4 +159,37 @@ const options = [
 </script>
 
 <style scoped>
+.toolbar {
+  margin-bottom: 20px;
+}
+
+.el-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.el-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.el-input, .el-select {
+  width: 100%;
+}
+
+.el-col .el-button {
+  margin-right: 10px;
+}
+
+.el-button[block] {
+  width: 100%;
+}
+
+/* 确保新增按钮和搜索框在同一行居中 */
+.toolbar .el-col {
+  padding: 10px;
+}
 </style>

@@ -1,22 +1,41 @@
 <template>
   <el-card>
-    <el-button type="primary" @click="addUser">新增</el-button>
-    <el-select
-    v-model="selectColumn">
-      <el-option
-      v-for="item in options"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value"
-      ></el-option>
-    </el-select>
-    <el-input v-model="searchQuery" size="small" placeholder="Type to search" />
+    <!-- 使用 el-row 和 el-col 创建顶部工具栏布局 -->
+    <el-row class="toolbar" justify="center" gutter={20}>
+      <el-col :span="4">
+        <!-- 搜索框 -->
+        <el-input v-model="searchQuery" size="small" placeholder="Type to search" clearable />
+      </el-col>
+      <el-col :span="2">
+        <!-- 下拉选择框 -->
+        <el-select v-model="selectColumn" size="small" placeholder="选择列">
+          <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+          ></el-option>
+        </el-select>
+      </el-col>
+      <el-col :span="2">
+        <!-- 新增按钮 -->
+        <el-button type="primary" @click="addUser" block>新增</el-button>
+      </el-col>
+    </el-row>
     <el-table :data="filteredRecords" border fit>
       <el-table-column prop="id" label="Id" align="center"/>
       <el-table-column prop="userName" label="UserName" align="center"/>
       <el-table-column prop="password" label="Password" align="center"/>
       <el-table-column prop="role" label="Role" align="center"/>
-      <el-table-column prop="status" label="Status" align="center"/>
+      <el-table-column label="status" align="center">
+        <template #default="scope">
+          <div class="flex justify-center">
+            <el-tag :type="scope.row.status === '启用' ? 'primary' : 'danger'" size="large">
+              {{ scope.row.status }}
+            </el-tag>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column prop="createdAt" label="CreatedAt" align="center"/>
       <el-table-column prop="updatedAt" label="UpdatedAt" align="center"/>
       <el-table-column label="Actions" align="center">
@@ -121,6 +140,7 @@ import {useUserFormValidation} from "@/hooks/user/useUserFormValidation.ts";
 import {useUserDelete} from "@/hooks/user/useUserDelete.ts";
 import {computed, ref} from "vue";
 import {useUserAdd} from "@/hooks/user/useUserAdd.ts";
+import {ElTableColumn} from "element-plus";
 
 // 使用用户列表相关逻辑
 const {records, total, queryPageParam, fetchData, handleCurrentChange} = useUserList();
@@ -194,5 +214,37 @@ const options = [
 </script>
 
 <style scoped>
+.toolbar {
+  margin-bottom: 20px;
+}
 
+.el-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.el-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.el-input, .el-select {
+  width: 100%;
+}
+
+.el-col .el-button {
+  margin-right: 10px;
+}
+
+.el-button[block] {
+  width: 100%;
+}
+
+/* 确保新增按钮和搜索框在同一行居中 */
+.toolbar .el-col {
+  padding: 10px;
+}
 </style>

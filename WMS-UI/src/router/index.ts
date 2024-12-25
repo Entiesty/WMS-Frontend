@@ -5,6 +5,7 @@ import {ElMessage} from "element-plus";
 import StockFlowChart from "@/views/StockFlowChart.vue";
 import EnterpriseInformation from "@/views/EnterpriseInformation.vue";
 import TopStockTransactions from "@/views/TopStockTransactions.vue";
+import {loadDynamicRoutes} from "@/hooks/Authorization/useDynamicRoutes.ts";
 
 const staticRoutes: Array<RouteRecordRaw> = [
     {
@@ -77,16 +78,20 @@ const router: Router = createRouter({
 });
 
 router.beforeEach(async (to, from) => {
-    const authorizationStore = useAuthorizationStore();  // 在守卫内部调用 useAuthStore()
+    const authorizationStore = useAuthorizationStore();
 
-    // 获取 token
     const token = authorizationStore.token;
 
-    // 如果没有 token 且目标页面不是登录页面，则重定向到登录页
     if (!token && to.name !== 'Login') {
         ElMessage.warning('请先登录以访问该页面');
         return { name: 'Login' };
     }
-})
+
+    // 确保动态路由已加载
+    if (!authorizationStore.hasLoadedRoutes) {
+        await loadDynamicRoutes(router);
+        authorizationStore.setHasLoadedRoutes(true);
+    }
+});
 
 export default router;

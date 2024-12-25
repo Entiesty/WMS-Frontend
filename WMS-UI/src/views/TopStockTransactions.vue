@@ -1,17 +1,19 @@
 <template>
   <el-card>
-    <el-date-picker
-        v-model="value"
-        type="daterange"
-        range-separator="To"
-        start-placeholder="Start date"
-        end-placeholder="End date"
-        @change="handleDateChange"/>
+    <div class="p-2 grid justify-center">
+      <el-date-picker
+          v-model="value"
+          type="daterange"
+          range-separator="To"
+          start-placeholder="Start date"
+          end-placeholder="End date"
+      />
+    </div>
 
     <el-table :data="stockTransactionRankingData" style="width: 100%">
-      <el-table-column prop="itemName" label="货品名称"/>
-      <el-table-column prop="totalIn" label="总进货量"/>
-      <el-table-column prop="totalOut" label="总出货量"/>
+      <el-table-column prop="itemName" label="货品名称" align="center"/>
+      <el-table-column prop="totalIn" label="总进货量" align="center"/>
+      <el-table-column prop="totalOut" label="总出货量" align="center"/>
     </el-table>
   </el-card>
 </template>
