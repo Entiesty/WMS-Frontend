@@ -13,7 +13,7 @@
       <el-card class="w-64" shadow="hover">
         <div class="text-center">
           <h3 class="text-lg font-semibold mb-2">仓库总数</h3>
-          <el-statistic :value="warehouseCount" :prefix="'仓库'" :precision="0" />
+          <el-statistic :value="warehouseCount" :prefix="'仓库'" :precision="0"/>
         </div>
       </el-card>
 
@@ -21,7 +21,7 @@
       <el-card class="w-64" shadow="hover">
         <div class="text-center">
           <h3 class="text-lg font-semibold mb-2">商品库存进度</h3>
-          <el-progress :percentage="stockProgress" status="success" />
+          <el-progress :percentage="stockProgress" status="success"/>
         </div>
       </el-card>
 
@@ -29,7 +29,7 @@
       <el-card class="w-64" shadow="hover">
         <div class="text-center">
           <h3 class="text-lg font-semibold mb-2">今日任务完成</h3>
-          <el-progress :percentage="taskCompletion" status="exception" />
+          <el-progress :percentage="taskCompletion" status="exception"/>
         </div>
       </el-card>
     </div>
@@ -37,7 +37,7 @@
     <!-- 数据统计表格 -->
     <el-card class="h-64 w-2/3" shadow="hover">
       <el-table :data="tableData" class="w-full max-w-4xl" border fit>
-        <el-table-column label="商品名称" prop="itemName" align="center" />
+        <el-table-column label="商品名称" prop="itemName" align="center"/>
         <el-table-column label="库存" prop="stock" align="center"/>
         <el-table-column label="出入库数量" prop="quantity" align="center"/>
       </el-table>
@@ -50,7 +50,7 @@
 
 <script setup lang="ts">
 import {useAuthorizationStore} from "@/stores/authorizationStore.ts";
-import {ref, onMounted} from 'vue';
+import {onMounted, ref} from 'vue';
 import * as echarts from 'echarts';
 
 // 获取授权存储的数据
@@ -63,10 +63,10 @@ const taskCompletion = ref(60); // 假设今日任务完成度为60%
 
 // 模拟的表格数据
 const tableData = ref([
-  { itemName: 'REDMI K80 Pro', stock: 120, quantity: 35 },
-  { itemName: 'Xiaomi 15 Pro', stock: 200, quantity: 80 },
-  { itemName: '米家净水器1000G Pro', stock: 50, quantity: 10 },
-  { itemName: '小米智能门锁2 Pro', stock: 500, quantity: 120 },
+  {itemName: 'REDMI K80 Pro', stock: 120, quantity: 35},
+  {itemName: 'Xiaomi 15 Pro', stock: 200, quantity: 80},
+  {itemName: '米家净水器1000G Pro', stock: 50, quantity: 10},
+  {itemName: '小米智能门锁2 Pro', stock: 500, quantity: 120},
 ]);
 
 // 折线图容器引用

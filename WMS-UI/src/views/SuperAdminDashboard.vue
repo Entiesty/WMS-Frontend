@@ -148,18 +148,22 @@ import {
   DataAnalysis,
   DataLine,
   Goods,
+  House,
   Lock,
   OfficeBuilding,
   User,
   UserFilled,
-  Van,
-  House
+  Van
 } from '@element-plus/icons-vue'
 import {useMenu} from "@/hooks/system/useMenu.ts";
 import {useAuthorizationStore} from "@/stores/authorizationStore.ts";
 
 const {handleMenuSelect, handleLogout} = useMenu();
 const authorizationStore = useAuthorizationStore();
+
+
+
+
 </script>
 
 <style scoped>

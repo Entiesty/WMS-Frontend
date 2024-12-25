@@ -61,6 +61,8 @@ export function useMenu() {
 
             // 执行登出逻辑
             authorizationStore.clearToken(); // 清除 token
+            authorizationStore.clearRole(); // 清除角色
+            authorizationStore.clearRoutes();
             await router.push("/"); // 跳转到首页
 
 

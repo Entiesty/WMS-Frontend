@@ -4,6 +4,8 @@ import {postRequest} from "@/services/api.ts";
 import {useAuthorizationStore} from "@/stores/authorizationStore.ts";
 import {useCaptcha} from "@/hooks/Authorization/useCaptcha.ts";
 import {useRoleRedirect} from "@/hooks/Authorization/useRoleRedirect.ts";
+import router from "@/router";
+import {loadDynamicRoutes} from "@/hooks/Authorization/useDynamicRoutes.ts";
 
 export default function useLoginForm() {
     const loginForm = reactive({
@@ -45,6 +47,7 @@ export default function useLoginForm() {
 
             console.log("登录成功:", response);
 
+            await loadDynamicRoutes(router);
             await redirectToRolePage(role);
         } catch (error: any) {
             loginResponseMessage.value = error?.response?.data?.message || "登录失败";

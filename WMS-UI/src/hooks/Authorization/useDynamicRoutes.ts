@@ -7,11 +7,18 @@ import type {Router} from "vue-router";
 
 export const loadDynamicRoutes = async (router: Router) => {
     const { registerRoutes } = useRegisterRoutes(router);
-    const role = useAuthorizationStore().role;
+    const store = useAuthorizationStore();
+    const role = store.role;
 
     try {
+        // 从后端获取动态路由数据
         const { data: routes } = await getRequest(`/route/${role}`);
         console.log('动态路由数据:', routes);
+
+        // 保存动态路由到 Pinia store
+        store.setRoutes(routes);
+
+        // 注册动态路由
         registerRoutes(routes);
         console.log('动态路由加载成功');
     } catch (error) {

@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <!-- 使用 el-row 和 el-col 创建顶部工具栏布局 -->
-    <el-row class="toolbar" justify="center" gutter={20}>
+    <el-row class="toolbar" justify="center">
       <el-col :span="4">
         <!-- 搜索框 -->
         <el-input v-model="searchQuery" size="small" placeholder="Type to search" clearable />
