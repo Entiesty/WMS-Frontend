@@ -1,18 +1,16 @@
-import {reactive, ref} from "vue";
-import type {FormData} from "@/types/Data.ts";
-import {postRequest} from "@/services/api.ts";
-
+import { reactive, ref } from "vue";
+import type { FormData } from "@/types/Data.ts";
+import { postRequest } from "@/services/api.ts";
+import { ElMessage } from "element-plus";
 
 export default function useRegisterForm() {
     const registerForm = reactive<FormData>({
         userName: "",
         password: "",
         role: "information_manager",
-        status: 0
-    })
+        status: 0,
+    });
 
-    let registerSucceed = ref<boolean>(false);
-    let registerFail = ref<boolean>(false);
     let registerResponseMessage = ref<string>("");
 
     const submitRegisterForm = async () => {
@@ -20,23 +18,25 @@ export default function useRegisterForm() {
             const response = await postRequest('/authorization/register', registerForm);
             console.log(response);
 
-            registerSucceed.value = true;
-            registerFail.value = false;
             registerResponseMessage.value = response.data.message;
+
+            // Display success message using ElMessage
+            ElMessage.success(registerResponseMessage.value);
+            registerForm.userName = '';
+            registerForm.password = '';
+
         } catch (error: any) {
-            console.log('错误信息：', error)
-            registerResponseMessage.value = error.response.data.message;
-            console.log("responseMessage", error.response.data.message);
-            registerFail.value = true;
-            registerSucceed.value = false;
+            console.log('错误信息：', error);
+            registerResponseMessage.value = error.response?.data?.message || "注册失败";
+
+            // Display error message using ElMessage
+            ElMessage.error(registerResponseMessage.value);
         }
-    }
+    };
 
     return {
         registerForm,
         submitRegisterForm,
         registerResponseMessage,
-        registerSucceed,
-        registerFail,
-    }
+    };
 }

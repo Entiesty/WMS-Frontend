@@ -1,4 +1,3 @@
-// src/hooks/useLoginForm.ts
 import {reactive, ref} from "vue";
 import {postRequest} from "@/services/api.ts";
 import {useAuthorizationStore} from "@/stores/authorizationStore.ts";
@@ -6,6 +5,7 @@ import {useCaptcha} from "@/hooks/Authorization/useCaptcha.ts";
 import {useRoleRedirect} from "@/hooks/Authorization/useRoleRedirect.ts";
 import router from "@/router";
 import {loadDynamicRoutes} from "@/hooks/Authorization/useDynamicRoutes.ts";
+import {ElMessage} from "element-plus";
 
 export default function useLoginForm() {
     const loginForm = reactive({
@@ -35,25 +35,36 @@ export default function useLoginForm() {
             const token = response.headers['authorization'];
             const role = response.headers['role'];
             const userName = response.headers['username'];
-
+            const status = response.headers['status'];
 
             authorizationStore.setToken(token);
             authorizationStore.setRole(role);
             authorizationStore.setUserName(userName);
 
-            loginResponseMessage.value = response.data.message;
-            loginSucceed.value = true;
-            loginFail.value = false;
-
             console.log("登录成功:", response);
 
-            await loadDynamicRoutes(router);
-            await redirectToRolePage(role);
+            if (status === "1") {
+                ElMessage.error("该账户已被封禁！");
+                loginFail.value = false;
+                loginForm.userName = '';
+                loginForm.password = '';
+                loginForm.captcha = '';
+            } else {
+                loginResponseMessage.value = response.data.message;
+                loginSucceed.value = true;
+                ElMessage.success(loginResponseMessage.value);
+                loginForm.userName = '';
+                loginForm.password = '';
+                loginForm.captcha = '';
+                await loadDynamicRoutes(router);
+                await redirectToRolePage(role);
+            }
         } catch (error: any) {
             loginResponseMessage.value = error?.response?.data?.message || "登录失败";
             loginFail.value = true;
             loginSucceed.value = false;
             console.error("登录失败:", error);
+            ElMessage.error(loginResponseMessage.value);
 
             // 更新验证码
             await loadCaptcha();
