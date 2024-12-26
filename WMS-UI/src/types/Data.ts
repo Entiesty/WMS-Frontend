@@ -50,3 +50,11 @@ export interface StockTransaction {
     operatorName: string,
     transactionTime: string,
 }
+
+export interface Route {
+    id: number,
+    name: string,
+    path: string,
+    parentName: string,
+    role: string,
+}

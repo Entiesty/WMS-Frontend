@@ -8,7 +8,7 @@ export function useRoleRedirect() {
     const getRedirectPathByRole = (role: string): string => {
         const roleRedirectMap: { [key: string]: string } = {
             'super_admin': '/SuperAdminDashboard/mainContent',
-            'information_manager': '/InformationManagerDashboard',
+            'information_manager': '/SuperAdminDashboard/mainContent',
             // 其他角色及对应的路径
         };
 

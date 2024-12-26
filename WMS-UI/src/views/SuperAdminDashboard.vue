@@ -86,7 +86,7 @@
                 <span>权限管理</span>
               </template>
               <el-menu-item index="7-1">菜单权限</el-menu-item>
-              <el-menu-item index="7-2">仓库权限</el-menu-item>
+<!--              <el-menu-item index="7-2">仓库权限</el-menu-item>-->
             </el-sub-menu>
 
             <el-sub-menu index="8">
@@ -100,16 +100,16 @@
               <el-menu-item index="8-2">货品排名</el-menu-item>
             </el-sub-menu>
 
-            <el-sub-menu index="9">
-              <template #title>
-                <el-icon>
-                  <DataLine/>
-                </el-icon>
-                <span>仓库统计</span>
-              </template>
-              <el-menu-item index="9-1">仓库进出排名</el-menu-item>
-              <el-menu-item index="9-2">仓库排名</el-menu-item>
-            </el-sub-menu>
+<!--            <el-sub-menu index="9">-->
+<!--              <template #title>-->
+<!--                <el-icon>-->
+<!--                  <DataLine/>-->
+<!--                </el-icon>-->
+<!--                <span>仓库统计</span>-->
+<!--              </template>-->
+<!--              <el-menu-item index="9-1">仓库进出排名</el-menu-item>-->
+<!--              <el-menu-item index="9-2">仓库排名</el-menu-item>-->
+<!--            </el-sub-menu>-->
           </el-menu>
         </el-scrollbar>
       </el-aside>

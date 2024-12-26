@@ -78,11 +78,10 @@ import useDomInteraction from "@/hooks/Authorization/useDomInteraction.ts";
 import useLoginForm from "@/hooks/Authorization/useLoginForm.ts";
 import useRegisterForm from "@/hooks/Authorization/useRegisterForm.ts";
 import {onMounted} from "vue";
-import {ElMessage} from 'element-plus';
 
 const {container, registerBtn, loginBtn} = useDomInteraction();
-const {loginForm, submitLoginForm, loginResponseMessage, loginSucceed, loginFail, captchaImageUrl, updateCaptcha} = useLoginForm();
-const {registerForm, submitRegisterForm, registerResponseMessage, registerSucceed, registerFail} = useRegisterForm();
+const {loginForm, submitLoginForm,captchaImageUrl, updateCaptcha} = useLoginForm();
+const {registerForm, submitRegisterForm} = useRegisterForm();
 
 onMounted(async () => {
   await updateCaptcha();
